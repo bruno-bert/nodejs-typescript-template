@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "outDir": "dist",
+    "module": "commonjs",
+    "baseUrl": "src",
+    "sourceMap": true,
+    "rootDirs": [
+      "src",
+      "tests"
+    ],
+    "paths": {
+      "@tests/*": [
+        "../tests/*"
+      ],
+      "@*": [
+        "*"
+      ]
+    },
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "rootDir": "src",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+  },
+  "include": [
+    "src",
+    "tests"
+  ],
+  "exclude": [
+    "*.tmp"
+  ]
+}

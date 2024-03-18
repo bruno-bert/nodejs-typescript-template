@@ -1,0 +1,6 @@
+{
+    "*.{ts,tsx}": [
+        "npm run eslint",
+        "npm run test:staged"
+    ]
+}
