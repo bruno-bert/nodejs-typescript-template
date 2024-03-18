@@ -1,7 +1,7 @@
 import { describe, expect, test, vi } from 'vitest'
 import { LoadDataRepositorySpy, throwError } from '@test-mocks'
 import { DbLoadData } from './load-data-service'
-// import { LoadDataError } from './errors'
+import { LoadDataError } from './errors'
 
 type SutTypes = {
   sut: DbLoadData
@@ -30,7 +30,7 @@ describe('Test Suite for load-data-service.spec', () => {
     const { sut, repository } = makeSut()
     vi.spyOn(repository, 'loadAll').mockImplementationOnce(throwError)
     const promise = sut.load()
-    await expect(promise).rejects.toThrowError(Error)
+    await expect(promise).rejects.toThrowError(LoadDataError)
   })
 
   test('Ensure that load data service returns exaclty what the repository returns', async () => {
