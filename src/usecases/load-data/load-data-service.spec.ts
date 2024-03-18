@@ -37,5 +37,6 @@ describe('Test Suite for load-data-service.spec', () => {
     const { sut, repository } = makeSut()
     const result = await sut.load()
     expect(result).toEqual(repository.result)
+    console.log('dsd')
   })
 })
