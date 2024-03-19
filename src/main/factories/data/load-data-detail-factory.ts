@@ -1,10 +1,14 @@
 import { makeLogControllerDecorator } from '@main/decorators'
 import { Controller } from '@presentation/protocols'
-import { LoadDataDetailController } from './load-data-detail-controller'
 
 import { LoadDataDetailMongoRepository } from '@infra'
-import { LoadDataDetailProtocol } from './protocols'
-import { DbLoadDataDetail, LoadDataDetailRepositoryProtocol } from '@usecases'
+
+import {
+  DbLoadDataDetail,
+  LoadDataDetailController,
+  LoadDataDetailProtocol,
+  LoadDataDetailRepositoryProtocol,
+} from '@usecases'
 
 const makeMongoRepository = (): LoadDataDetailRepositoryProtocol => {
   const repository = new LoadDataDetailMongoRepository()
