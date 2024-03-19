@@ -2,4 +2,8 @@ GET http://localhost:5050/api/data
 
 ###
 
+GET http://localhost:5050/api/data/65f9acbe0788d490b445ae7f
+
+###
+
 GET http://localhost:5051/metrics

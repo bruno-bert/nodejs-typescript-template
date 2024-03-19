@@ -11,7 +11,7 @@ export class LoadDataDetailController implements Controller {
     try {
       const id = request.id
       const data = await this.loadDataDetail.load(id)
-      return data.length ? ok(data) : noContent()
+      return data ? ok(data) : noContent()
     } catch (error: unknown) {
       return serverError(error as Error)
     }

@@ -5,5 +5,5 @@ export interface LoadDataDetailProtocol {
 }
 
 export namespace LoadDataDetailProtocol {
-  export type Result = AnyDataModel[]
+  export type Result = AnyDataModel
 }
