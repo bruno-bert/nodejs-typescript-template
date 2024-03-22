@@ -1,5 +1,5 @@
 import { adaptRoute } from '@main/adapters'
-import { makeLoadDataDetailController } from '@usecases'
+import { makeLoadDataDetailController } from '@main/factories'
 
 import { Router } from 'express'
 

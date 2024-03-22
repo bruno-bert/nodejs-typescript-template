@@ -6,15 +6,15 @@ Repository: https://github.com/bruno-bert/nodejs-typescript-template.git
 
 
 ### Project Setup
-- [x] Husky for Formatted Commit messages 
-- [x] Vitest for Unit Tests and Coverage - with In-Memory MongoDB
-- [x] Dockerfile to a MongoDB Server 
+- Husky for Formatted Commit messages 
+- Vitest for Unit Tests and Coverage - with In-Memory MongoDB
+- Dockerfile to a MongoDB Server 
 - [ ] Plop templates and actions to create other features
 
 ### Code
-- [x] Clean Architecture for a basid crud
-- [x] Unit tests for the basic crud
-- [x] Folders Structure based on Feature
+- Clean Architecture for a basid crud
+- Unit tests for the basic crud
+- Folders Structure based on Feature
 - [ ] Paging and Sorting endpoints
 - [ ] NodeJS Prometheus Client Middleware for Monitoring
 - [ ] OpenAPI specification automatically generated in /docs

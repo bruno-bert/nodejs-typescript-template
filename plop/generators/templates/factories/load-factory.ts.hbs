@@ -1,0 +1,52 @@
+import {
+  makeLogControllerDecorator,
+  makeMetricsDecorator,
+} from '@main/decorators'
+import { Controller } from '@presentation/protocols'
+
+import { Load{{pascalCase name}}MongoRepository } from '@infra'
+// import { Load{{pascalCase name}}PrismaRepository } from '@infra'
+
+import {
+  DbLoad{{pascalCase name}},
+  Load{{pascalCase name}}Controller,
+  Load{{pascalCase name}}Protocol,
+  Load{{pascalCase name}}RepositoryProtocol,
+} from '@usecases'
+
+const makeMongoRepository = (): Load{{pascalCase name}}RepositoryProtocol => {
+  const repository = new Load{{pascalCase name}}MongoRepository()
+  return repository
+}
+
+// const makePrismaRepository = (): Load{{pascalCase name}}RepositoryProtocol => {
+//  const repository = new Load{{pascalCase name}}PrismaRepository()
+//  return repository
+// }
+
+const makeDatabaseRepository = (): Load{{pascalCase name}}RepositoryProtocol => {
+  switch (process.env.DATABASE_TYPE) {
+    case 'MONGODB': {
+      const repository = makeMongoRepository()
+      return makeMetricsDecorator(repository) as Load{{pascalCase name}}RepositoryProtocol
+    }
+    // case 'PRISMA': {
+    //  const repository = makePrismaRepository()
+    //  return makeMetricsDecorator(repository) as Load{{pascalCase name}}RepositoryProtocol
+    // }
+    default: {
+      const repository = makeMongoRepository()
+      return makeMetricsDecorator(repository) as Load{{pascalCase name}}RepositoryProtocol
+    }
+  }
+}
+
+export const makeDbLoad{{pascalCase name}} = (): Load{{pascalCase name}}Protocol => {
+  const repository = makeDatabaseRepository()
+  return new DbLoad{{pascalCase name}}(repository)
+}
+
+export const makeLoad{{pascalCase name}}Controller = (): Controller => {
+  const controller = new Load{{pascalCase name}}Controller(makeDbLoad{{pascalCase name}}())
+  return makeLogControllerDecorator(controller)
+}

@@ -1,4 +1,7 @@
-import { makeLogControllerDecorator } from '@main/decorators'
+import {
+  makeLogControllerDecorator,
+  makeMetricsDecorator,
+} from '@main/decorators'
 import { Controller } from '@presentation/protocols'
 
 import { LoadDataDetailMongoRepository } from '@infra'
@@ -15,17 +18,25 @@ const makeMongoRepository = (): LoadDataDetailRepositoryProtocol => {
   return repository
 }
 
-const makeInfrastructureRepository = (): LoadDataDetailRepositoryProtocol => {
+const makeDatabaseRepository = (): LoadDataDetailRepositoryProtocol => {
   switch (process.env.DATABASE_TYPE) {
-    case 'MONGODB':
-      return makeMongoRepository()
-    default:
-      return makeMongoRepository()
+    case 'MONGODB': {
+      const repository = makeMongoRepository()
+      return makeMetricsDecorator(
+        repository,
+      ) as LoadDataDetailRepositoryProtocol
+    }
+    default: {
+      const repository = makeMongoRepository()
+      return makeMetricsDecorator(
+        repository,
+      ) as LoadDataDetailRepositoryProtocol
+    }
   }
 }
 
 export const makeDbLoadDataDetail = (): LoadDataDetailProtocol => {
-  const repository = makeInfrastructureRepository()
+  const repository = makeDatabaseRepository()
   return new DbLoadDataDetail(repository)
 }
 

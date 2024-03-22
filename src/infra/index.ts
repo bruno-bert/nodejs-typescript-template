@@ -1,2 +1,2 @@
-export * from './mongodb'
-export * from './prometheus'
+export * from './database'
+export * from './monitoring'
