@@ -2,7 +2,34 @@ GET http://localhost:5050/api/data
 
 ###
 
-GET http://localhost:5050/api/data/65f9acbe0788d490b445ae7f
+GET http://localhost:5050/api/data/65f9acbe0788d490b445ae81
+
+###
+
+DELETE http://localhost:5050/api/data/65f9acbe0788d490b445ae81
+
+
+###
+
+PUT http://localhost:5050/api/data/65f9acbe0788d490b445ae81
+content-type: application/json
+
+{
+    "name": "Tester",
+    "welcomeMessage": "Hello Tester!"
+}
+
+###
+
+POST http://localhost:5050/api/data
+content-type: application/json
+
+{
+    "name": "Tester",
+    "welcomeMessage": "Hello Tester!"
+}
+
+
 
 ###
 

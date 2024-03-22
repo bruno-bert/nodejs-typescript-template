@@ -1,7 +1,11 @@
 import { MongoHelper } from '../utils'
 import { DeleteDataRepositoryProtocol } from '@usecases'
+import {
+  DatabaseDeleteDataError,
+  DatabaseDeleteDataNotFoundError,
+} from '@usecases/data/delete-data/errors'
+
 import { ObjectId } from 'mongodb'
-import { MongoDeleteDataError, MongoDeleteDataNotFoundError } from '../errors'
 
 export class DeleteDataMongoRepository implements DeleteDataRepositoryProtocol {
   private COLLECTION: string = 'sales'
@@ -20,10 +24,11 @@ export class DeleteDataMongoRepository implements DeleteDataRepositoryProtocol {
       if (result?.deletedCount) {
         return { success: true, count: result?.deletedCount }
       } else {
-        throw new MongoDeleteDataNotFoundError('id: ' + id)
+        throw new DatabaseDeleteDataNotFoundError('id: ' + id)
       }
     } catch (error) {
-      throw new MongoDeleteDataError(error as string)
+      if (error instanceof DatabaseDeleteDataNotFoundError) throw error
+      throw new DatabaseDeleteDataError(error as string)
     }
   }
 }

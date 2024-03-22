@@ -1,6 +1,6 @@
 import { LoadDataPagingRepositoryProtocol } from '@usecases'
-import { MongoLoadDataPagingError } from '../errors'
 import { MongoHelper, QueryBuilder } from '../utils'
+import { DatabaseLoadDataPagingError } from '@usecases/data/load-data-paging/errors'
 
 export class LoadDataPagingMongoRepository
   implements LoadDataPagingRepositoryProtocol
@@ -24,7 +24,7 @@ export class LoadDataPagingMongoRepository
       const documents = await AnyDataCollection.aggregate(query).toArray()
       return MongoHelper.mapCollection(documents)
     } catch (error) {
-      throw new MongoLoadDataPagingError(error as string)
+      throw new DatabaseLoadDataPagingError(error as string)
     }
   }
 }

@@ -1,7 +1,11 @@
 import { MongoHelper } from '../utils'
 import { LoadDataDetailRepositoryProtocol } from '@usecases'
+import {
+  DatabaseLoadDataDetailError,
+  DatabaseLoadDataDetailNotFoundError,
+} from '@usecases/data/load-data-detail/errors'
+
 import { ObjectId } from 'mongodb'
-import { MongoLoadDataDetailError } from '../errors'
 
 export class LoadDataDetailMongoRepository
   implements LoadDataDetailRepositoryProtocol
@@ -14,9 +18,13 @@ export class LoadDataDetailMongoRepository
       const detail = await detailCollection.findOne({
         _id: new ObjectId(id),
       })
+
+      if (!detail) throw new DatabaseLoadDataDetailNotFoundError('id: ' + id)
+
       return detail && MongoHelper.map(detail)
     } catch (error) {
-      throw new MongoLoadDataDetailError(error as string)
+      if (error instanceof DatabaseLoadDataDetailNotFoundError) throw error
+      throw new DatabaseLoadDataDetailError(error as string)
     }
   }
 }

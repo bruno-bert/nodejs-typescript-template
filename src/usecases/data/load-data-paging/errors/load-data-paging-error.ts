@@ -4,3 +4,10 @@ export class LoadDataPagingError extends Error {
     this.name = 'LoadDataPagingError'
   }
 }
+
+export class DatabaseLoadDataPagingError extends Error {
+  constructor(error: string) {
+    super(`Error on loading data paging in database: ${error}`)
+    this.name = 'DatabaseLoadDataPagingError'
+  }
+}

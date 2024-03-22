@@ -1,10 +1,11 @@
 import { Controller, HttpResponse } from '@presentation/protocols'
-import { noContent, serverError, ok } from '@presentation/helpers'
+import { noContent, serverError, ok, notFound } from '@presentation/helpers'
 import { DeleteDataProtocol } from './protocols'
 import { DeleteDataModel } from '@usecases'
+import { DeleteDataNotFoundError } from './errors'
 
 export class DeleteDataController implements Controller {
-  constructor(private readonly DeleteData: DeleteDataProtocol) {}
+  constructor(private readonly deleteData: DeleteDataProtocol) {}
 
   async map({
     id,
@@ -18,9 +19,10 @@ export class DeleteDataController implements Controller {
       const params = await this.map({
         id,
       })
-      const data = await this.DeleteData.delete(params)
+      const data = await this.deleteData.delete(params)
       return data ? ok(data) : noContent()
-    } catch (error: unknown) {
+    } catch (error: any) {
+      if (error instanceof DeleteDataNotFoundError) return notFound()
       return serverError(error as Error)
     }
   }

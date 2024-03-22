@@ -1,4 +1,4 @@
-import { MongoCreateDataError } from '../errors/mongo-create-data-error'
+import { DatabaseCreateDataError } from '@usecases/data/create-data/errors'
 import { MongoHelper } from '../utils'
 import { CreateDataRepositoryProtocol } from '@usecases'
 
@@ -11,9 +11,10 @@ export class CreateDataMongoRepository implements CreateDataRepositoryProtocol {
     try {
       const DataCollection = await MongoHelper.getCollection(this.COLLECTION)
       const document = await DataCollection.insertOne(params)
-      return { id: document.insertedId.toString(), ...params }
+      const result = { id: document.insertedId.toString(), ...params }
+      return MongoHelper.map(result)
     } catch (error) {
-      throw new MongoCreateDataError(error as string)
+      throw new DatabaseCreateDataError(error as string)
     }
   }
 }

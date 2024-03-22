@@ -1,6 +1,6 @@
 import { LoadDataRepositoryProtocol } from '@usecases'
-import { MongoLoadDataError } from '../errors'
 import { MongoHelper, QueryBuilder } from '../utils'
+import { DatabaseLoadDataError } from '@usecases/data/load-data/errors'
 
 export class LoadDataMongoRepository implements LoadDataRepositoryProtocol {
   private COLLECTION: string = 'sales'
@@ -22,7 +22,7 @@ export class LoadDataMongoRepository implements LoadDataRepositoryProtocol {
       const documents = await AnyDataCollection.aggregate(query).toArray()
       return MongoHelper.mapCollection(documents)
     } catch (error) {
-      throw new MongoLoadDataError(error as string)
+      throw new DatabaseLoadDataError(error as string)
     }
   }
 }

@@ -23,9 +23,7 @@ const makeDatabaseRepository = (): DeleteDataRepositoryProtocol => {
   switch (process.env.DATABASE_TYPE) {
     case 'MONGODB': {
       const repository = makeMongoRepository()
-      return makeMetricsDecorator(
-        repository,
-      ) as unknown as DeleteDataRepositoryProtocol
+      return makeMetricsDecorator(repository) as DeleteDataRepositoryProtocol
     }
     // case 'PRISMA': {
     //   const repository = makePrismaRepository()
