@@ -1,22 +1,22 @@
 import { describe, expect, test, vi } from 'vitest'
 import {
   CreateDataRepositorySpy,
-  CreateDataValidatorSpy,
+  DataValidatorSpy,
   mockCreateDataParams,
   throwError,
 } from '@test-mocks'
 import { DbCreateData } from './create-data-service'
 import { CreateDataError } from './errors'
-import { AnyDataModel } from '@usecases'
+import { AnyDataModel, CreateDataRepositoryProtocol } from '@usecases'
 
 type SutTypes = {
   sut: DbCreateData
   repository: CreateDataRepositorySpy
-  validator: CreateDataValidatorSpy
+  validator: DataValidatorSpy<CreateDataRepositoryProtocol.Params>
 }
 const makeSut = (): SutTypes => {
   const repository = new CreateDataRepositorySpy()
-  const validator = new CreateDataValidatorSpy()
+  const validator = new DataValidatorSpy()
   const sut = new DbCreateData(repository, validator)
   return {
     sut,
@@ -37,7 +37,7 @@ describe('Test Suite for create-data-service.spec', () => {
     expect(spy).toHaveBeenCalledWith(data)
   })
 
-  test('Ensure that validate in validator is called once and with correct parameters', async () => {
+  test('Ensure that validate in validator is called once', async () => {
     const { sut, validator } = makeSut()
     const spy = vi
       .spyOn(validator, 'validate')

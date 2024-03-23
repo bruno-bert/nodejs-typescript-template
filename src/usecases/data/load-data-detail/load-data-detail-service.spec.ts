@@ -1,19 +1,27 @@
 import { describe, expect, test, vi } from 'vitest'
-import { LoadDataDetailRepositorySpy, throwError } from '@test-mocks'
+import {
+  DataValidatorSpy,
+  LoadDataDetailRepositorySpy,
+  throwError,
+} from '@test-mocks'
 import { DbLoadDataDetail } from './load-data-detail-service'
 import { LoadDataDetailError } from './errors'
 import { AnyDataModel } from '../data-model'
+import { LoadDataDetailRepositoryProtocol } from './protocols'
 
 type SutTypes = {
   sut: DbLoadDataDetail
   repository: LoadDataDetailRepositorySpy
+  validator: DataValidatorSpy<LoadDataDetailRepositoryProtocol.Params>
 }
 const makeSut = (): SutTypes => {
   const repository = new LoadDataDetailRepositorySpy()
-  const sut = new DbLoadDataDetail(repository)
+  const validator = new DataValidatorSpy()
+  const sut = new DbLoadDataDetail(repository, validator)
   return {
     sut,
     repository,
+    validator,
   }
 }
 
@@ -27,6 +35,15 @@ describe('Test Suite for load-data-detail-service.spec', () => {
     await sut.load(id)
     expect(spy).toHaveBeenCalledOnce()
     expect(spy).toHaveBeenCalledWith(id)
+  })
+
+  test('Ensure that validate in validator is called once', async () => {
+    const { sut, validator } = makeSut()
+    const spy = vi
+      .spyOn(validator, 'validate')
+      .mockImplementation(() => Promise.resolve({ success: true } as any))
+    await sut.load('1')
+    expect(spy).toHaveBeenCalledOnce()
   })
 
   test('Ensure that load data detail service to throw a Custom LoadDataDetailError when repository throws', async () => {

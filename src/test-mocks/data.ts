@@ -83,16 +83,10 @@ export class CreateDataRepositorySpy implements CreateDataRepositoryProtocol {
     return this.result
   }
 }
-export class CreateDataValidatorSpy
-  implements ValidatorProtocol<CreateDataRepositoryProtocol.Params>
-{
-  validate(
-    schema: object,
-    values: CreateDataModel.Params,
-  ): Promise<ValidatorProtocol.Result> {
+export class DataValidatorSpy<T> implements ValidatorProtocol<T> {
+  validate(schema: object, values: any): Promise<ValidatorProtocol.Result> {
     return Promise.resolve({
       success: true,
-      messages: [{ message: 'Validation succeeded', type: 'info' }],
     })
   }
 }

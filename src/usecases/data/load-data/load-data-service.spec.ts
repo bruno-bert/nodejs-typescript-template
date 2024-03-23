@@ -1,18 +1,25 @@
 import { describe, expect, test, vi } from 'vitest'
-import { LoadDataRepositorySpy, throwError } from '@test-mocks'
+import {
+  DataValidatorSpy,
+  LoadDataRepositorySpy,
+  throwError,
+} from '@test-mocks'
 import { DbLoadData } from './load-data-service'
 import { LoadDataError } from './errors'
 
 type SutTypes = {
   sut: DbLoadData
   repository: LoadDataRepositorySpy
+  validator: DataValidatorSpy<any>
 }
 const makeSut = (): SutTypes => {
   const repository = new LoadDataRepositorySpy()
-  const sut = new DbLoadData(repository)
+  const validator = new DataValidatorSpy()
+  const sut = new DbLoadData(repository, validator)
   return {
     sut,
     repository,
+    validator,
   }
 }
 
@@ -22,6 +29,15 @@ describe('Test Suite for load-data-service.spec', () => {
     const spy = vi
       .spyOn(repository, 'loadAll')
       .mockImplementation(() => Promise.resolve([]))
+    await sut.load()
+    expect(spy).toHaveBeenCalledOnce()
+  })
+
+  test('Ensure that validate in validator is called once', async () => {
+    const { sut, validator } = makeSut()
+    const spy = vi
+      .spyOn(validator, 'validate')
+      .mockImplementation(() => Promise.resolve({ success: true } as any))
     await sut.load()
     expect(spy).toHaveBeenCalledOnce()
   })

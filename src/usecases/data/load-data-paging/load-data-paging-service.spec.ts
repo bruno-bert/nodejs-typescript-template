@@ -1,18 +1,26 @@
 import { describe, expect, test, vi } from 'vitest'
-import { LoadDataPagingRepositorySpy, throwError } from '@test-mocks'
+import {
+  DataValidatorSpy,
+  LoadDataPagingRepositorySpy,
+  throwError,
+} from '@test-mocks'
 import { DbLoadDataPaging } from './load-data-paging-service'
 import { LoadDataPagingError } from './errors'
+import { LoadDataPagingRepositoryProtocol } from './protocols'
 
 type SutTypes = {
   sut: DbLoadDataPaging
   repository: LoadDataPagingRepositorySpy
+  validator: DataValidatorSpy<LoadDataPagingRepositoryProtocol.Params>
 }
 const makeSut = (): SutTypes => {
   const repository = new LoadDataPagingRepositorySpy()
-  const sut = new DbLoadDataPaging(repository)
+  const validator = new DataValidatorSpy()
+  const sut = new DbLoadDataPaging(repository, validator)
   return {
     sut,
     repository,
+    validator,
   }
 }
 
@@ -22,6 +30,15 @@ describe('Test Suite for load-data-paging-service.spec', () => {
     const spy = vi
       .spyOn(repository, 'loadPaging')
       .mockImplementation(() => Promise.resolve([]))
+    await sut.loadPaging()
+    expect(spy).toHaveBeenCalledOnce()
+  })
+
+  test('Ensure that validate in validator is called once', async () => {
+    const { sut, validator } = makeSut()
+    const spy = vi
+      .spyOn(validator, 'validate')
+      .mockImplementation(() => Promise.resolve({ success: true } as any))
     await sut.loadPaging()
     expect(spy).toHaveBeenCalledOnce()
   })

@@ -1,23 +1,28 @@
 import { describe, expect, test, vi } from 'vitest'
 import {
+  DataValidatorSpy,
   EditDataRepositorySpy,
   mockEditDataParams,
   throwError,
 } from '@test-mocks'
 import { DbEditData } from './edit-data-service'
 import { EditDataError } from './errors'
-import { AnyDataModel } from '@usecases'
+import { AnyDataModel, EditDataRepositoryProtocol } from '@usecases'
 
 type SutTypes = {
   sut: DbEditData
   repository: EditDataRepositorySpy
+  validator: DataValidatorSpy<EditDataRepositoryProtocol.Params>
 }
 const makeSut = (): SutTypes => {
   const repository = new EditDataRepositorySpy()
-  const sut = new DbEditData(repository)
+  const validator = new DataValidatorSpy()
+  const sut = new DbEditData(repository, validator)
+
   return {
     sut,
     repository,
+    validator,
   }
 }
 
@@ -32,6 +37,17 @@ describe('Test Suite for edit-data-service.spec', () => {
     await sut.edit(id, data)
     expect(spy).toHaveBeenCalledOnce()
     expect(spy).toHaveBeenCalledWith(id, data)
+  })
+
+  test('Ensure that validate in validator is called once', async () => {
+    const { sut, validator } = makeSut()
+    const spy = vi
+      .spyOn(validator, 'validate')
+      .mockImplementation(() => Promise.resolve({ success: true } as any))
+    const id = '1'
+    const data = mockEditDataParams(id)
+    await sut.edit(id, data)
+    expect(spy).toHaveBeenCalledOnce()
   })
 
   test('Ensure that edit data service to throw a Custom EditDataError when repository throws', async () => {
