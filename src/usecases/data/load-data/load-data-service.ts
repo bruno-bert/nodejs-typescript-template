@@ -10,7 +10,7 @@ export class DbLoadData implements LoadDataProtocol {
 
   async load(): Promise<LoadDataProtocol.Result> {
     try {
-      this.loadDataValidator.validate({})
+      // this.loadDataValidator.validate(null, {})
       return await this.loadDataRepository.loadAll()
     } catch (error) {
       throw new LoadDataError(error as unknown as string)

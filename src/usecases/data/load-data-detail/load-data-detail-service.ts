@@ -3,6 +3,7 @@ import {
   LoadDataDetailProtocol,
   LoadDataDetailRepositoryProtocol,
 } from './protocols'
+import { schema } from './load-data-detail-service-schema'
 
 export class DbLoadDataDetail implements LoadDataDetailProtocol {
   constructor(
@@ -11,7 +12,7 @@ export class DbLoadDataDetail implements LoadDataDetailProtocol {
   ) {}
 
   async load(id: string): Promise<LoadDataDetailProtocol.Result> {
-    this.loadDataDetailValidator.validate({ id })
+    this.loadDataDetailValidator.validate(schema, { id })
     return this.loadDataDetailRepository.loadById(id)
   }
 }

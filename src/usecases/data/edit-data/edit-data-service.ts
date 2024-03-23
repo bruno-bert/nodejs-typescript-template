@@ -1,6 +1,7 @@
 import { EditDataModel } from '@usecases'
 import { EditDataProtocol, EditDataRepositoryProtocol } from './protocols'
 import { ValidatorProtocol } from '@utils'
+import { schema } from './edit-data-service-schema'
 
 export class DbEditData implements EditDataProtocol {
   constructor(
@@ -26,7 +27,7 @@ export class DbEditData implements EditDataProtocol {
     id: string,
     { name, welcomeMessage, date }: EditDataModel.Params,
   ): Promise<EditDataProtocol.Result> {
-    this.editDataValidator.validate({
+    this.editDataValidator.validate(schema, {
       id,
       name,
       welcomeMessage,

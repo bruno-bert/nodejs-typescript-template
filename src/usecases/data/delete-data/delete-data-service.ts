@@ -1,6 +1,7 @@
 import { DeleteDataModel } from '@usecases'
 import { DeleteDataProtocol, DeleteDataRepositoryProtocol } from './protocols'
 import { ValidatorProtocol } from '@utils'
+import { schema } from './delete-data-service-schema'
 
 export class DbDeleteData implements DeleteDataProtocol {
   constructor(
@@ -23,7 +24,7 @@ export class DbDeleteData implements DeleteDataProtocol {
       id,
     })
 
-    this.deleteDataValidator.validate({ id })
+    this.deleteDataValidator.validate(schema, { id })
 
     return await this.deleteDataRepository.delete(params)
   }

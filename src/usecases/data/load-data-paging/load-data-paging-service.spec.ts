@@ -34,15 +34,6 @@ describe('Test Suite for load-data-paging-service.spec', () => {
     expect(spy).toHaveBeenCalledOnce()
   })
 
-  test('Ensure that validate in validator is called once', async () => {
-    const { sut, validator } = makeSut()
-    const spy = vi
-      .spyOn(validator, 'validate')
-      .mockImplementation(() => Promise.resolve({ success: true } as any))
-    await sut.loadPaging()
-    expect(spy).toHaveBeenCalledOnce()
-  })
-
   test('Ensure that load data paging service to throw a Custom LoadDataPagingError when repository throws', async () => {
     const { sut, repository } = makeSut()
     vi.spyOn(repository, 'loadPaging').mockImplementationOnce(throwError)

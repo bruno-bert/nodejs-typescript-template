@@ -13,7 +13,7 @@ export class DbLoadDataPaging implements LoadDataPagingProtocol {
 
   async loadPaging(): Promise<LoadDataPagingProtocol.Result> {
     try {
-      this.loadDataPagingValidator.validate({})
+      // this.loadDataPagingValidator.validate(null, {})
       return await this.loadDataPagingRepository.loadPaging()
     } catch (error) {
       throw new LoadDataPagingError(error as unknown as string)

@@ -33,15 +33,6 @@ describe('Test Suite for load-data-service.spec', () => {
     expect(spy).toHaveBeenCalledOnce()
   })
 
-  test('Ensure that validate in validator is called once', async () => {
-    const { sut, validator } = makeSut()
-    const spy = vi
-      .spyOn(validator, 'validate')
-      .mockImplementation(() => Promise.resolve({ success: true } as any))
-    await sut.load()
-    expect(spy).toHaveBeenCalledOnce()
-  })
-
   test('Ensure that load data service to throw a Custom LoadDataError when repository throws', async () => {
     const { sut, repository } = makeSut()
     vi.spyOn(repository, 'loadAll').mockImplementationOnce(() =>
