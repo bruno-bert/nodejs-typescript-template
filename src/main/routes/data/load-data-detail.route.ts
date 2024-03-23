@@ -1,8 +1,10 @@
 import { adaptRoute } from '@main/adapters'
-import { makeLoadDataDetailController } from '@main/factories'
-
+import { makeLoadDataDetailFactory } from '@usecases'
 import { Router } from 'express'
 
 export default (router: Router): void => {
-  router.get('/data/:id', adaptRoute(makeLoadDataDetailController()))
+  router.get(
+    '/data/:id',
+    adaptRoute(makeLoadDataDetailFactory().makeController()),
+  )
 }

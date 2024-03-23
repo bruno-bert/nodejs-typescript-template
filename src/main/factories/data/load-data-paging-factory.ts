@@ -29,6 +29,10 @@ export class LoadDataPagingFactory extends AbstractFactory<LoadDataPagingReposit
 
   makeController = (): Controller => {
     const controller = new LoadDataPagingController(this.makeDbLoadDataPaging())
-    return super.makeControllerWithDecorators(controller)
+    return this.makeControllerWithDecorators(controller)
   }
+}
+
+export const makeLoadDataPagingFactory = () => {
+  return new LoadDataPagingFactory()
 }

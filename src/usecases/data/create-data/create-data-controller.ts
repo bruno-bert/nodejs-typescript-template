@@ -1,7 +1,7 @@
 import { Controller, HttpResponse } from '@presentation/protocols'
-import { noContent, serverError, ok } from '@presentation/helpers'
+import { noContent, serverError, ok, badRequest } from '@presentation/helpers'
 import { CreateDataProtocol } from './protocols'
-import { CreateDataModel } from '@usecases'
+import { CreateDataModel, MissingParamsError } from '@usecases'
 
 export class CreateDataController implements Controller {
   constructor(private readonly createData: CreateDataProtocol) {}
@@ -29,6 +29,7 @@ export class CreateDataController implements Controller {
       const data = await this.createData.create(params)
       return data ? ok(data) : noContent()
     } catch (error: unknown) {
+      if (error instanceof MissingParamsError) return badRequest(error)
       return serverError(error as Error)
     }
   }

@@ -29,6 +29,10 @@ export class LoadDataDetailFactory extends AbstractFactory<LoadDataDetailReposit
 
   makeController = (): Controller => {
     const controller = new LoadDataDetailController(this.makeDbLoadDataDetail())
-    return super.makeControllerWithDecorators(controller)
+    return this.makeControllerWithDecorators(controller)
   }
+}
+
+export const makeLoadDataDetailFactory = () => {
+  return new LoadDataDetailFactory()
 }

@@ -19,7 +19,7 @@ content-type: application/json
     "welcomeMessage": "Hello Tester!"
 }
 
-###
+### Success 200
 
 POST http://localhost:5050/api/data
 content-type: application/json
@@ -29,7 +29,14 @@ content-type: application/json
     "welcomeMessage": "Hello Tester!"
 }
 
+###  Error 400
+POST http://localhost:5050/api/data
+content-type: application/json
 
+{
+   
+    "welcomeMessage": "Hello Tester!"
+}
 
 ###
 

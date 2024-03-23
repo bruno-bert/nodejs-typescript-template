@@ -29,6 +29,10 @@ export class EditDataFactory extends AbstractFactory<EditDataRepositoryProtocol>
 
   makeController = (): Controller => {
     const controller = new EditDataController(this.makeDbEditData())
-    return super.makeControllerWithDecorators(controller)
+    return this.makeControllerWithDecorators(controller)
   }
+}
+
+export const makeEditDataFactory = () => {
+  return new EditDataFactory()
 }

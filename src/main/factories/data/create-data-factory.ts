@@ -29,6 +29,10 @@ export class CreateDataFactory extends AbstractFactory<CreateDataRepositoryProto
 
   makeController = (): Controller => {
     const controller = new CreateDataController(this.makeDbCreateData())
-    return super.makeControllerWithDecorators(controller)
+    return this.makeControllerWithDecorators(controller)
   }
+}
+
+export const makeCreateDataFactory = () => {
+  return new CreateDataFactory()
 }

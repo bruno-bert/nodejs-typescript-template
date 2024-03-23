@@ -29,6 +29,10 @@ export class LoadDataFactory extends AbstractFactory<LoadDataRepositoryProtocol>
 
   makeController = (): Controller => {
     const controller = new LoadDataController(this.makeDbLoadData())
-    return super.makeControllerWithDecorators(controller)
+    return this.makeControllerWithDecorators(controller)
   }
+}
+
+export const makeLoadDataFactory = () => {
+  return new LoadDataFactory()
 }

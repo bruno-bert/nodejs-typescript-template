@@ -1,6 +1,7 @@
 import { describe, expect, test, vi } from 'vitest'
 import {
   CreateDataRepositorySpy,
+  CreateDataValidatorSpy,
   mockCreateDataParams,
   throwError,
 } from '@test-mocks'
@@ -11,13 +12,16 @@ import { AnyDataModel } from '@usecases'
 type SutTypes = {
   sut: DbCreateData
   repository: CreateDataRepositorySpy
+  validator: CreateDataValidatorSpy
 }
 const makeSut = (): SutTypes => {
   const repository = new CreateDataRepositorySpy()
-  const sut = new DbCreateData(repository)
+  const validator = new CreateDataValidatorSpy()
+  const sut = new DbCreateData(repository, validator)
   return {
     sut,
     repository,
+    validator,
   }
 }
 
@@ -31,6 +35,16 @@ describe('Test Suite for create-data-service.spec', () => {
     await sut.create(data)
     expect(spy).toHaveBeenCalledOnce()
     expect(spy).toHaveBeenCalledWith(data)
+  })
+
+  test('Ensure that validate in validator is called once and with correct parameters', async () => {
+    const { sut, validator } = makeSut()
+    const spy = vi
+      .spyOn(validator, 'validate')
+      .mockImplementation(() => Promise.resolve({ success: true } as any))
+    const values = mockCreateDataParams()
+    await sut.create(values)
+    expect(spy).toHaveBeenCalledOnce()
   })
 
   test('Ensure that create data service to throw a Custom CreateDataError when repository throws', async () => {

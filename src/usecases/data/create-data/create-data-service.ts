@@ -1,6 +1,7 @@
-import { CreateDataModel } from '@usecases'
+import { CreateDataModel, MissingParamsError } from '@usecases'
 import { CreateDataProtocol, CreateDataRepositoryProtocol } from './protocols'
 import { ValidatorProtocol } from '@utils'
+import { schema } from './create-data-service-schema'
 
 export class DbCreateData implements CreateDataProtocol {
   constructor(
@@ -20,16 +21,22 @@ export class DbCreateData implements CreateDataProtocol {
     }
   }
 
+  handleValidationErrors(validate: ValidatorProtocol.Result) {
+    throw new MissingParamsError(validate.originalMessage || '')
+  }
+
   async create({
     name,
     welcomeMessage,
     date,
   }: CreateDataModel.Params): Promise<CreateDataProtocol.Result> {
-    this.createDataValitator.validate({
+    const validate = await this.createDataValitator.validate(schema, {
       name,
       welcomeMessage,
       date,
     })
+
+    if (!validate.success) this.handleValidationErrors(validate)
 
     const params = await this.map({
       name,

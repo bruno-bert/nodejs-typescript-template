@@ -29,6 +29,10 @@ export class DeleteDataFactory extends AbstractFactory<DeleteDataRepositoryProto
 
   makeController = (): Controller => {
     const controller = new DeleteDataController(this.makeDbDeleteData())
-    return super.makeControllerWithDecorators(controller)
+    return this.makeControllerWithDecorators(controller)
   }
+}
+
+export const makeDeleteDataFactory = () => {
+  return new DeleteDataFactory()
 }

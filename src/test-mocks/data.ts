@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   randFullName,
   randGitCommitMessage,
@@ -18,6 +19,7 @@ import {
   DeleteDataRepositoryProtocol,
   EditDataModel,
 } from '@usecases'
+import { ValidatorProtocol } from '@utils'
 
 export const mockCreateDataParams = (): CreateDataModel.Params => ({
   welcomeMessage: randText(),
@@ -79,6 +81,19 @@ export class CreateDataRepositorySpy implements CreateDataRepositoryProtocol {
     params: CreateDataRepositoryProtocol.Params,
   ): Promise<CreateDataRepositoryProtocol.Result> {
     return this.result
+  }
+}
+export class CreateDataValidatorSpy
+  implements ValidatorProtocol<CreateDataRepositoryProtocol.Params>
+{
+  validate(
+    schema: object,
+    values: CreateDataModel.Params,
+  ): Promise<ValidatorProtocol.Result> {
+    return Promise.resolve({
+      success: true,
+      messages: [{ message: 'Validation succeeded', type: 'info' }],
+    })
   }
 }
 

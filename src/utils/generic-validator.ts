@@ -1,3 +1,3 @@
 export interface GenericValidator {
-  validate: (params: any) => Promise<any>
+  validate: (schema: any, values: any) => Promise<any>
 }
