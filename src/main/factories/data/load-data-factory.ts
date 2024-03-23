@@ -1,42 +1,34 @@
-import {
-  makeLogControllerDecorator,
-  makeMetricsDecorator,
-} from '@main/decorators'
 import { Controller } from '@presentation/protocols'
 
 import { LoadDataMongoRepository } from '@infra'
+// import { LoadDataPrismaRepository } from '@infra'
 
 import {
   DbLoadData,
+  LoadDataRepositoryProtocol,
   LoadDataController,
   LoadDataProtocol,
-  LoadDataRepositoryProtocol,
 } from '@usecases'
+import { AbstractFactory } from '../abstract-factory'
 
-const makeMongoRepository = (): LoadDataRepositoryProtocol => {
-  const repository = new LoadDataMongoRepository()
-  return repository
-}
+export class LoadDataFactory extends AbstractFactory<LoadDataRepositoryProtocol> {
+  // makePrismaRepository = (): LoadDataRepositoryProtocol => {
+  //   const repository = new LoadDataPrismaRepository()
+  //   return repository
+  // }
 
-const makeDatabaseRepository = (): LoadDataRepositoryProtocol => {
-  switch (process.env.DATABASE_TYPE) {
-    case 'MONGODB': {
-      const repository = makeMongoRepository()
-      return makeMetricsDecorator(repository) as LoadDataRepositoryProtocol
-    }
-    default: {
-      const repository = makeMongoRepository()
-      return makeMetricsDecorator(repository) as LoadDataRepositoryProtocol
-    }
+  makeMongoRepository = (): LoadDataRepositoryProtocol => {
+    const repository = new LoadDataMongoRepository()
+    return repository
   }
-}
 
-export const makeDbLoadData = (): LoadDataProtocol => {
-  const repository = makeDatabaseRepository()
-  return new DbLoadData(repository)
-}
+  makeDbLoadData = (): LoadDataProtocol => {
+    const { repository, validator } = this.makeServiceInjections()
+    return new DbLoadData(repository, validator)
+  }
 
-export const makeLoadDataController = (): Controller => {
-  const controller = new LoadDataController(makeDbLoadData())
-  return makeLogControllerDecorator(controller)
+  makeController = (): Controller => {
+    const controller = new LoadDataController(this.makeDbLoadData())
+    return super.makeControllerWithDecorators(controller)
+  }
 }

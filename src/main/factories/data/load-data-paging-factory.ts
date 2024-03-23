@@ -1,7 +1,3 @@
-import {
-  makeLogControllerDecorator,
-  makeMetricsDecorator,
-} from '@main/decorators'
 import { Controller } from '@presentation/protocols'
 
 import { LoadDataPagingMongoRepository } from '@infra'
@@ -9,45 +5,30 @@ import { LoadDataPagingMongoRepository } from '@infra'
 
 import {
   DbLoadDataPaging,
+  LoadDataPagingRepositoryProtocol,
   LoadDataPagingController,
   LoadDataPagingProtocol,
-  LoadDataPagingRepositoryProtocol,
 } from '@usecases'
+import { AbstractFactory } from '../abstract-factory'
 
-const makeMongoRepository = (): LoadDataPagingRepositoryProtocol => {
-  const repository = new LoadDataPagingMongoRepository()
-  return repository
-}
+export class LoadDataPagingFactory extends AbstractFactory<LoadDataPagingRepositoryProtocol> {
+  // makePrismaRepository = (): LoadDataPagingRepositoryProtocol => {
+  //   const repository = new LoadDataPagingPrismaRepository()
+  //   return repository
+  // }
 
-const makeDatabaseRepository = (): LoadDataPagingRepositoryProtocol => {
-  switch (process.env.DATABASE_TYPE) {
-    case 'MONGODB': {
-      const repository = makeMongoRepository()
-      return makeMetricsDecorator(
-        repository,
-      ) as unknown as LoadDataPagingRepositoryProtocol
-    }
-    // case 'PRISMA': {
-    //  const repository = makePrismaRepository()
-    //  return makeMetricsDecorator(
-    //    repository,
-    //  ) as LoadDataPagingRepositoryProtocol
-    // }
-    default: {
-      const repository = makeMongoRepository()
-      return makeMetricsDecorator(
-        repository,
-      ) as unknown as LoadDataPagingRepositoryProtocol
-    }
+  makeMongoRepository = (): LoadDataPagingRepositoryProtocol => {
+    const repository = new LoadDataPagingMongoRepository()
+    return repository
   }
-}
 
-export const makeDbLoadDataPaging = (): LoadDataPagingProtocol => {
-  const repository = makeDatabaseRepository()
-  return new DbLoadDataPaging(repository)
-}
+  makeDbLoadDataPaging = (): LoadDataPagingProtocol => {
+    const { repository, validator } = this.makeServiceInjections()
+    return new DbLoadDataPaging(repository, validator)
+  }
 
-export const makeLoadDataPagingController = (): Controller => {
-  const controller = new LoadDataPagingController(makeDbLoadDataPaging())
-  return makeLogControllerDecorator(controller)
+  makeController = (): Controller => {
+    const controller = new LoadDataPagingController(this.makeDbLoadDataPaging())
+    return super.makeControllerWithDecorators(controller)
+  }
 }

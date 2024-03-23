@@ -25,7 +25,7 @@ const makeMongoRepository = (): Load{{pascalCase name}}RepositoryProtocol => {
 // }
 
 const makeDatabaseRepository = (): Load{{pascalCase name}}RepositoryProtocol => {
-  switch (process.env.DATABASE_TYPE) {
+  switch (env.DATABASE_TYPE) {
     case 'MONGODB': {
       const repository = makeMongoRepository()
       return makeMetricsDecorator(repository) as Load{{pascalCase name}}RepositoryProtocol

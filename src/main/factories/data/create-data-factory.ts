@@ -1,7 +1,3 @@
-import {
-  makeLogControllerDecorator,
-  makeMetricsDecorator,
-} from '@main/decorators'
 import { Controller } from '@presentation/protocols'
 
 import { CreateDataMongoRepository } from '@infra'
@@ -13,39 +9,26 @@ import {
   CreateDataController,
   CreateDataProtocol,
 } from '@usecases'
+import { AbstractFactory } from '../abstract-factory'
 
-const makeMongoRepository = (): CreateDataRepositoryProtocol => {
-  const repository = new CreateDataMongoRepository()
-  return repository
-}
+export class CreateDataFactory extends AbstractFactory<CreateDataRepositoryProtocol> {
+  // makePrismaRepository = (): CreateDataRepositoryProtocol => {
+  //   const repository = new CreateDataPrismaRepository()
+  //   return repository
+  // }
 
-const makeDatabaseRepository = (): CreateDataRepositoryProtocol => {
-  switch (process.env.DATABASE_TYPE) {
-    case 'MONGODB': {
-      const repository = makeMongoRepository()
-      return makeMetricsDecorator(
-        repository,
-      ) as unknown as CreateDataRepositoryProtocol
-    }
-    // case 'PRISMA': {
-    //   const repository = makePrismaRepository()
-    //   return makeMetricsDecorator(repository) as CreateDataRepositoryProtocol
-    // }
-    default: {
-      const repository = makeMongoRepository()
-      return makeMetricsDecorator(
-        repository,
-      ) as unknown as CreateDataRepositoryProtocol
-    }
+  makeMongoRepository = (): CreateDataRepositoryProtocol => {
+    const repository = new CreateDataMongoRepository()
+    return repository
   }
-}
 
-export const makeDbCreateData = (): CreateDataProtocol => {
-  const repository = makeDatabaseRepository()
-  return new DbCreateData(repository)
-}
+  makeDbCreateData = (): CreateDataProtocol => {
+    const { repository, validator } = this.makeServiceInjections()
+    return new DbCreateData(repository, validator)
+  }
 
-export const makeCreateDataController = (): Controller => {
-  const controller = new CreateDataController(makeDbCreateData())
-  return makeLogControllerDecorator(controller)
+  makeController = (): Controller => {
+    const controller = new CreateDataController(this.makeDbCreateData())
+    return super.makeControllerWithDecorators(controller)
+  }
 }

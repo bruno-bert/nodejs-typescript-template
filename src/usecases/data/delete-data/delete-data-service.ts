@@ -1,9 +1,11 @@
 import { DeleteDataModel } from '@usecases'
 import { DeleteDataProtocol, DeleteDataRepositoryProtocol } from './protocols'
+import { ValidatorProtocol } from '@utils'
 
 export class DbDeleteData implements DeleteDataProtocol {
   constructor(
     private readonly deleteDataRepository: DeleteDataRepositoryProtocol,
+    private readonly deleteDataValidator: ValidatorProtocol<DeleteDataRepositoryProtocol.Params>,
   ) {}
 
   async map({
@@ -20,6 +22,9 @@ export class DbDeleteData implements DeleteDataProtocol {
     const params = await this.map({
       id,
     })
+
+    this.deleteDataValidator.validate({ id })
+
     return await this.deleteDataRepository.delete(params)
   }
 }

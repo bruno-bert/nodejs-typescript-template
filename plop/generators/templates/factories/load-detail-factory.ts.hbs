@@ -1,3 +1,5 @@
+import env from '@main/config/env'
+
 import {
   makeLogControllerDecorator,
   makeMetricsDecorator,
@@ -25,7 +27,7 @@ const makeMongoRepository = (): Load{{pascalCase name}}DetailRepositoryProtocol 
 // }
 
 const makeDatabaseRepository = (): Load{{pascalCase name}}DetailRepositoryProtocol => {
-  switch (process.env.DATABASE_TYPE) {
+  switch (env.DATABASE_TYPE) {
     case 'MONGODB': {
       const repository = makeMongoRepository()
       return makeMetricsDecorator(

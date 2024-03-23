@@ -1,6 +1,7 @@
 import express from 'express'
 import client from 'prom-client'
 import log from './logger'
+import env from '@main/config/env'
 
 const app = express()
 
@@ -27,7 +28,7 @@ export function startMetricsServer() {
     return res.send(await client.register.metrics())
   })
 
-  const metricsServerPort = process.env.METRICS_SERVER_PORT || 5051
+  const metricsServerPort = env.metricsServerPort
   app.listen(metricsServerPort, () => {
     log.info(`Metrics server started at http://localhost:${metricsServerPort}`)
   })

@@ -1,7 +1,3 @@
-import {
-  makeLogControllerDecorator,
-  makeMetricsDecorator,
-} from '@main/decorators'
 import { Controller } from '@presentation/protocols'
 
 import { DeleteDataMongoRepository } from '@infra'
@@ -9,41 +5,30 @@ import { DeleteDataMongoRepository } from '@infra'
 
 import {
   DbDeleteData,
+  DeleteDataRepositoryProtocol,
   DeleteDataController,
   DeleteDataProtocol,
-  DeleteDataRepositoryProtocol,
 } from '@usecases'
+import { AbstractFactory } from '../abstract-factory'
 
-const makeMongoRepository = (): DeleteDataRepositoryProtocol => {
-  const repository = new DeleteDataMongoRepository()
-  return repository
-}
+export class DeleteDataFactory extends AbstractFactory<DeleteDataRepositoryProtocol> {
+  // makePrismaRepository = (): DeleteDataRepositoryProtocol => {
+  //   const repository = new DeleteDataPrismaRepository()
+  //   return repository
+  // }
 
-const makeDatabaseRepository = (): DeleteDataRepositoryProtocol => {
-  switch (process.env.DATABASE_TYPE) {
-    case 'MONGODB': {
-      const repository = makeMongoRepository()
-      return makeMetricsDecorator(repository) as DeleteDataRepositoryProtocol
-    }
-    // case 'PRISMA': {
-    //   const repository = makePrismaRepository()
-    //   return makeMetricsDecorator(repository) as DeleteDataRepositoryProtocol
-    // }
-    default: {
-      const repository = makeMongoRepository()
-      return makeMetricsDecorator(
-        repository,
-      ) as unknown as DeleteDataRepositoryProtocol
-    }
+  makeMongoRepository = (): DeleteDataRepositoryProtocol => {
+    const repository = new DeleteDataMongoRepository()
+    return repository
   }
-}
 
-export const makeDbDeleteData = (): DeleteDataProtocol => {
-  const repository = makeDatabaseRepository()
-  return new DbDeleteData(repository)
-}
+  makeDbDeleteData = (): DeleteDataProtocol => {
+    const { repository, validator } = this.makeServiceInjections()
+    return new DbDeleteData(repository, validator)
+  }
 
-export const makeDeleteDataController = (): Controller => {
-  const controller = new DeleteDataController(makeDbDeleteData())
-  return makeLogControllerDecorator(controller)
+  makeController = (): Controller => {
+    const controller = new DeleteDataController(this.makeDbDeleteData())
+    return super.makeControllerWithDecorators(controller)
+  }
 }

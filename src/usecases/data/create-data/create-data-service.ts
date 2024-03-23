@@ -1,9 +1,11 @@
 import { CreateDataModel } from '@usecases'
 import { CreateDataProtocol, CreateDataRepositoryProtocol } from './protocols'
+import { ValidatorProtocol } from '@utils'
 
 export class DbCreateData implements CreateDataProtocol {
   constructor(
-    private readonly CreateDataRepository: CreateDataRepositoryProtocol,
+    private readonly createDataRepository: CreateDataRepositoryProtocol,
+    private readonly createDataValitator: ValidatorProtocol<CreateDataRepositoryProtocol.Params>,
   ) {}
 
   async map({
@@ -23,12 +25,18 @@ export class DbCreateData implements CreateDataProtocol {
     welcomeMessage,
     date,
   }: CreateDataModel.Params): Promise<CreateDataProtocol.Result> {
+    this.createDataValitator.validate({
+      name,
+      welcomeMessage,
+      date,
+    })
+
     const params = await this.map({
       name,
       welcomeMessage,
       date,
     })
 
-    return this.CreateDataRepository.create(params)
+    return this.createDataRepository.create(params)
   }
 }

@@ -1,3 +1,4 @@
+import { ValidatorProtocol } from '@utils'
 import {
   LoadDataDetailProtocol,
   LoadDataDetailRepositoryProtocol,
@@ -5,10 +6,12 @@ import {
 
 export class DbLoadDataDetail implements LoadDataDetailProtocol {
   constructor(
-    private readonly loadDataRepository: LoadDataDetailRepositoryProtocol,
+    private readonly loadDataDetailRepository: LoadDataDetailRepositoryProtocol,
+    private readonly loadDataDetailValidator: ValidatorProtocol<LoadDataDetailRepositoryProtocol.Params>,
   ) {}
 
   async load(id: string): Promise<LoadDataDetailProtocol.Result> {
-    return this.loadDataRepository.loadById(id)
+    this.loadDataDetailValidator.validate({ id })
+    return this.loadDataDetailRepository.loadById(id)
   }
 }

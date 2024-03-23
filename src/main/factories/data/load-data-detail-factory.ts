@@ -1,46 +1,34 @@
-import {
-  makeLogControllerDecorator,
-  makeMetricsDecorator,
-} from '@main/decorators'
 import { Controller } from '@presentation/protocols'
 
 import { LoadDataDetailMongoRepository } from '@infra'
+// import { LoadDataDetailPrismaRepository } from '@infra'
 
 import {
   DbLoadDataDetail,
+  LoadDataDetailRepositoryProtocol,
   LoadDataDetailController,
   LoadDataDetailProtocol,
-  LoadDataDetailRepositoryProtocol,
 } from '@usecases'
+import { AbstractFactory } from '../abstract-factory'
 
-const makeMongoRepository = (): LoadDataDetailRepositoryProtocol => {
-  const repository = new LoadDataDetailMongoRepository()
-  return repository
-}
+export class LoadDataDetailFactory extends AbstractFactory<LoadDataDetailRepositoryProtocol> {
+  // makePrismaRepository = (): LoadDataDetailRepositoryProtocol => {
+  //   const repository = new LoadDataDetailPrismaRepository()
+  //   return repository
+  // }
 
-const makeDatabaseRepository = (): LoadDataDetailRepositoryProtocol => {
-  switch (process.env.DATABASE_TYPE) {
-    case 'MONGODB': {
-      const repository = makeMongoRepository()
-      return makeMetricsDecorator(
-        repository,
-      ) as LoadDataDetailRepositoryProtocol
-    }
-    default: {
-      const repository = makeMongoRepository()
-      return makeMetricsDecorator(
-        repository,
-      ) as LoadDataDetailRepositoryProtocol
-    }
+  makeMongoRepository = (): LoadDataDetailRepositoryProtocol => {
+    const repository = new LoadDataDetailMongoRepository()
+    return repository
   }
-}
 
-export const makeDbLoadDataDetail = (): LoadDataDetailProtocol => {
-  const repository = makeDatabaseRepository()
-  return new DbLoadDataDetail(repository)
-}
+  makeDbLoadDataDetail = (): LoadDataDetailProtocol => {
+    const { repository, validator } = this.makeServiceInjections()
+    return new DbLoadDataDetail(repository, validator)
+  }
 
-export const makeLoadDataDetailController = (): Controller => {
-  const controller = new LoadDataDetailController(makeDbLoadDataDetail())
-  return makeLogControllerDecorator(controller)
+  makeController = (): Controller => {
+    const controller = new LoadDataDetailController(this.makeDbLoadDataDetail())
+    return super.makeControllerWithDecorators(controller)
+  }
 }

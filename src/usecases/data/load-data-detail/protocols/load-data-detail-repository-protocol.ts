@@ -5,5 +5,6 @@ export interface LoadDataDetailRepositoryProtocol {
 }
 
 export namespace LoadDataDetailRepositoryProtocol {
+  export type Params = { id: string }
   export type Result = AnyDataModel
 }

@@ -15,6 +15,7 @@ Repository: https://github.com/bruno-bert/nodejs-typescript-template.git
 - Clean Architecture for a basid crud
 - Unit tests for the basic crud
 - Folders Structure based on Feature
+- [ ] validations with zod
 - [ ] Paging and Sorting endpoints
 - [ ] NodeJS Prometheus Client Middleware for Monitoring
 - [ ] OpenAPI specification automatically generated in /docs

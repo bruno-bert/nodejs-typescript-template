@@ -1,7 +1,8 @@
 import { PrometheusDatabaseMetricsDecorator } from '@infra'
+import env from '@main/config/env'
 
 export const makeMetricsDecorator = (repository: any) => {
-  switch (process.env.METRICS_TYPE) {
+  switch (env.metricsType) {
     case 'PROMETHEUS': {
       const decorator = new PrometheusDatabaseMetricsDecorator(repository)
       return decorator
