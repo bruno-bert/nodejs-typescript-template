@@ -18,6 +18,13 @@ import {
   CreateDataRepositoryProtocol,
   DeleteDataRepositoryProtocol,
   EditDataModel,
+  CreateDataProtocol,
+  EditDataProtocol,
+  DeleteDataProtocol,
+  DeleteDataModel,
+  LoadDataProtocol,
+  LoadDataPagingProtocol,
+  LoadDataDetailProtocol,
 } from '@usecases'
 import { ValidatorProtocol } from '@utils'
 
@@ -40,6 +47,85 @@ export const mockAnyDataModel = (): AnyDataModel => {
     name: randWord(),
     welcomeMessage: randGitCommitMessage(),
     date: randRecentDate(),
+  }
+}
+
+export const mockLoadDataParams = (): AnyDataModel[] => {
+  return [
+    {
+      id: randUuid(),
+      name: randWord(),
+      welcomeMessage: randGitCommitMessage(),
+      date: randRecentDate(),
+    },
+    {
+      id: randUuid(),
+      name: randWord(),
+      welcomeMessage: randGitCommitMessage(),
+      date: randRecentDate(),
+    },
+  ]
+}
+
+export class CreateDataSpy implements CreateDataProtocol {
+  async map(params: CreateDataModel.Params): Promise<CreateDataModel.Params> {
+    return Promise.resolve(params)
+  }
+
+  result = mockAnyDataModel()
+
+  async create(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    params: CreateDataModel.Params,
+  ): Promise<CreateDataProtocol.Result> {
+    return this.result
+  }
+}
+export class EditDataSpy implements EditDataProtocol {
+  result = mockEditDataParams('1')
+
+  async edit(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    id: string,
+    params: EditDataModel.Params,
+  ): Promise<EditDataProtocol.Result> {
+    return this.result
+  }
+}
+
+export class LoadDataSpy implements LoadDataProtocol {
+  result = [mockAnyDataModel(), mockAnyDataModel()]
+  load(): Promise<LoadDataProtocol.Result> {
+    return Promise.resolve(this.result)
+  }
+}
+
+export class LoadDataPagingSpy implements LoadDataPagingProtocol {
+  result = [mockAnyDataModel(), mockAnyDataModel()]
+  loadPaging(): Promise<LoadDataPagingProtocol.Result> {
+    return Promise.resolve(this.result)
+  }
+}
+
+export class LoadDataDetailSpy implements LoadDataDetailProtocol {
+  result = mockAnyDataModel()
+  load(): Promise<LoadDataDetailProtocol.Result> {
+    return Promise.resolve(this.result)
+  }
+}
+
+export class DeleteDataSpy implements DeleteDataProtocol {
+  async map(params: DeleteDataModel.Params): Promise<DeleteDataModel.Params> {
+    return Promise.resolve({ id: params.id })
+  }
+
+  result = { success: true, count: 1 }
+
+  async delete(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    params: DeleteDataModel.Params,
+  ): Promise<DeleteDataProtocol.Result> {
+    return this.result
   }
 }
 

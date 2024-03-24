@@ -10,7 +10,7 @@ export class LoadDataController implements Controller {
   async handle(request: LoadDataController.Request): Promise<HttpResponse> {
     try {
       const data = await this.loadData.load()
-      return data.length ? ok(data) : noContent()
+      return data ? ok(data) : noContent()
     } catch (error: any) {
       return errorToHttpResponse(error)
     }

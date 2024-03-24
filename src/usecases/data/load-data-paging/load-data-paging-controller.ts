@@ -12,7 +12,7 @@ export class LoadDataPagingController implements Controller {
   ): Promise<HttpResponse> {
     try {
       const data = await this.loadDataPaging.loadPaging()
-      return data.length ? ok(data) : noContent()
+      return data ? ok(data) : noContent()
     } catch (error: any) {
       return errorToHttpResponse(error)
     }
