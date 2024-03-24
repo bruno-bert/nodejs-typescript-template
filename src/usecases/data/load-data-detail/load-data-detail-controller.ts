@@ -1,7 +1,8 @@
 import { Controller, HttpResponse } from '@presentation/protocols'
-import { noContent, serverError, ok, notFound } from '@presentation/helpers'
+import { noContent, ok, notFound } from '@presentation/helpers'
 import { LoadDataDetailProtocol } from './protocols'
 import { LoadDataDetailNotFoundError } from './errors'
+import { errorToHttpResponse } from '@utils/error-handler'
 
 export class LoadDataDetailController implements Controller {
   constructor(private readonly loadDataDetail: LoadDataDetailProtocol) {}
@@ -13,9 +14,9 @@ export class LoadDataDetailController implements Controller {
       const id = request.id
       const data = await this.loadDataDetail.load(id)
       return data ? ok(data) : noContent()
-    } catch (error: unknown) {
+    } catch (error: any) {
       if (error instanceof LoadDataDetailNotFoundError) return notFound()
-      return serverError(error as Error)
+      return errorToHttpResponse(error)
     }
   }
 }

@@ -1,8 +1,9 @@
 import { Controller, HttpResponse } from '@presentation/protocols'
-import { noContent, serverError, ok, notFound } from '@presentation/helpers'
+import { noContent, ok, notFound } from '@presentation/helpers'
 import { DeleteDataProtocol } from './protocols'
 import { DeleteDataModel } from '@usecases'
 import { DeleteDataNotFoundError } from './errors'
+import { errorToHttpResponse } from '@utils/error-handler'
 
 export class DeleteDataController implements Controller {
   constructor(private readonly deleteData: DeleteDataProtocol) {}
@@ -23,7 +24,7 @@ export class DeleteDataController implements Controller {
       return data ? ok(data) : noContent()
     } catch (error: any) {
       if (error instanceof DeleteDataNotFoundError) return notFound()
-      return serverError(error as Error)
+      return errorToHttpResponse(error)
     }
   }
 }

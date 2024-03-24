@@ -15,7 +15,7 @@ PUT http://localhost:5050/api/data/65f9acbe0788d490b445ae81
 content-type: application/json
 
 {
-    "name": "Tester",
+    
     "welcomeMessage": "Hello Tester!"
 }
 

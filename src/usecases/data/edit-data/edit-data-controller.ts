@@ -1,8 +1,9 @@
 import { Controller, HttpResponse } from '@presentation/protocols'
-import { noContent, serverError, ok, notFound } from '@presentation/helpers'
+import { noContent, ok, notFound } from '@presentation/helpers'
 import { EditDataProtocol } from './protocols'
 import { EditDataModel } from '@usecases'
 import { EditDataNotFoundError } from './errors'
+import { errorToHttpResponse } from '@utils/error-handler'
 
 export class EditDataController implements Controller {
   constructor(private readonly editData: EditDataProtocol) {}
@@ -32,9 +33,9 @@ export class EditDataController implements Controller {
 
       const data = await this.editData.edit(id, params)
       return data ? ok(data) : noContent()
-    } catch (error: unknown) {
+    } catch (error: any) {
       if (error instanceof EditDataNotFoundError) return notFound()
-      return serverError(error as Error)
+      return errorToHttpResponse(error)
     }
   }
 }

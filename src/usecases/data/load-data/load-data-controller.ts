@@ -1,6 +1,7 @@
 import { Controller, HttpResponse } from '@presentation/protocols'
-import { noContent, serverError, ok } from '@presentation/helpers'
+import { noContent, ok } from '@presentation/helpers'
 import { LoadDataProtocol } from './protocols'
+import { errorToHttpResponse } from '@utils/error-handler'
 
 export class LoadDataController implements Controller {
   constructor(private readonly loadData: LoadDataProtocol) {}
@@ -10,8 +11,8 @@ export class LoadDataController implements Controller {
     try {
       const data = await this.loadData.load()
       return data.length ? ok(data) : noContent()
-    } catch (error: unknown) {
-      return serverError(error as Error)
+    } catch (error: any) {
+      return errorToHttpResponse(error)
     }
   }
 }
