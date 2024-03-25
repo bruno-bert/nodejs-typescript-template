@@ -6,5 +6,6 @@ export const contentType = (
   next: NextFunction,
 ): void => {
   res.type('json')
+
   next()
 }

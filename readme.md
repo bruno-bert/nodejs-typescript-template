@@ -6,7 +6,9 @@ Repository: https://github.com/bruno-bert/nodejs-typescript-template.git
 
 ## Immediate NEXT STEPS
 
-- [ ] Create tests for controllers
+- [ ] automatically generate OpenApi Spec
+- [ ] automatically generate OpenApi Documentation
+
 
 ### Project Setup
 - Husky for Formatted Commit messages 

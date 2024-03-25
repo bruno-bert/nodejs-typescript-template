@@ -1,5 +1,5 @@
 import { MongoHelper } from '../utils'
-import { DeleteDataRepositoryProtocol } from '@usecases'
+import { DatabaseInvalidIdError, DeleteDataRepositoryProtocol } from '@usecases'
 import {
   DatabaseDeleteDataError,
   DatabaseDeleteDataNotFoundError,
@@ -14,10 +14,17 @@ export class DeleteDataMongoRepository implements DeleteDataRepositoryProtocol {
     id,
   }: DeleteDataRepositoryProtocol.Params): Promise<DeleteDataRepositoryProtocol.Result> {
     try {
+      let objectId
+      try {
+        objectId = new ObjectId(id)
+      } catch (error) {
+        throw new DatabaseInvalidIdError(error as string)
+      }
+
       const DataCollection = await MongoHelper.getCollection(this.COLLECTION)
 
       const query = {
-        _id: new ObjectId(id),
+        _id: objectId,
       }
 
       const result = await DataCollection.deleteOne(query)
@@ -28,6 +35,7 @@ export class DeleteDataMongoRepository implements DeleteDataRepositoryProtocol {
       }
     } catch (error) {
       if (error instanceof DatabaseDeleteDataNotFoundError) throw error
+      if (error instanceof DatabaseInvalidIdError) throw error
       throw new DatabaseDeleteDataError(error as string)
     }
   }

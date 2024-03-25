@@ -1,5 +1,5 @@
 import { MongoHelper } from '../utils'
-import { EditDataRepositoryProtocol } from '@usecases'
+import { DatabaseInvalidIdError, EditDataRepositoryProtocol } from '@usecases'
 import {
   DatabaseEditDataError,
   DatabaseEditDataNotFoundError,
@@ -14,9 +14,16 @@ export class EditDataMongoRepository implements EditDataRepositoryProtocol {
     params: EditDataRepositoryProtocol.Params,
   ): Promise<EditDataRepositoryProtocol.Result> {
     try {
+      let objectId
+      try {
+        objectId = new ObjectId(id)
+      } catch (error) {
+        throw new DatabaseInvalidIdError(error as string)
+      }
+
       const DataCollection = await MongoHelper.getCollection(this.COLLECTION)
       const query = {
-        _id: new ObjectId(id),
+        _id: objectId,
       }
 
       const update = {
@@ -34,6 +41,7 @@ export class EditDataMongoRepository implements EditDataRepositoryProtocol {
       }
     } catch (error) {
       if (error instanceof DatabaseEditDataNotFoundError) throw error
+      if (error instanceof DatabaseInvalidIdError) throw error
       throw new DatabaseEditDataError(error as string)
     }
   }

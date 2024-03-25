@@ -11,6 +11,7 @@ export default defineConfig({
       '**/coverage/**',
       '**/.husky/**',
       '**/.plop/**',
+      '**/.docs/**',
     ],
     coverage: {
       reporter: ['text', 'json', 'html'],
@@ -22,6 +23,7 @@ export default defineConfig({
         '**/coverage/**',
         '**/.husky/**',
         '**/.plop/**',
+        '**/.docs/**',
       ],
     },
   },

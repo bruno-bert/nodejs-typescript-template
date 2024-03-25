@@ -1,5 +1,8 @@
 import { MongoHelper } from '../utils'
-import { LoadDataDetailRepositoryProtocol } from '@usecases'
+import {
+  DatabaseInvalidIdError,
+  LoadDataDetailRepositoryProtocol,
+} from '@usecases'
 import {
   DatabaseLoadDataDetailError,
   DatabaseLoadDataDetailNotFoundError,
@@ -14,9 +17,17 @@ export class LoadDataDetailMongoRepository
 
   async loadById(id: string): Promise<LoadDataDetailRepositoryProtocol.Result> {
     try {
+      let objectId
+
+      try {
+        objectId = new ObjectId(id)
+      } catch (error) {
+        throw new DatabaseInvalidIdError(error as string)
+      }
+
       const detailCollection = await MongoHelper.getCollection(this.COLLECTION)
       const detail = await detailCollection.findOne({
-        _id: new ObjectId(id),
+        _id: objectId,
       })
 
       if (!detail) throw new DatabaseLoadDataDetailNotFoundError('id: ' + id)
@@ -24,6 +35,7 @@ export class LoadDataDetailMongoRepository
       return detail && MongoHelper.map(detail)
     } catch (error) {
       if (error instanceof DatabaseLoadDataDetailNotFoundError) throw error
+      if (error instanceof DatabaseInvalidIdError) throw error
       throw new DatabaseLoadDataDetailError(error as string)
     }
   }
