@@ -16,7 +16,7 @@
     "docker:build": "docker build -t my-mongodb .",
     "docker:run": "docker run -d --name my-mongodb-container -p 27017:27017 my-mongodb",
     "prepare": "husky",
-    "generate": "yarn plop --plopfile plop/generators/plopfile.js --force"
+    "generate": "plop --plopfile plop/generators/plopfile.js --force && npm run lint"
   },
   "keywords": [],
   "author": "",
@@ -66,6 +66,7 @@
     "pino-pretty": "^10.3.1",
     "prom-client": "^15.1.0",
     "response-time": "^2.3.2",
+    "swagger-ui-dist": "^5.12.0",
     "swagger-ui-express": "^5.0.0",
     "zod": "^3.22.4"
   },

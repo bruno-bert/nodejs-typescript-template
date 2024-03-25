@@ -1,0 +1,37 @@
+import { Controller, HttpResponse } from '@presentation/protocols'
+import { noContent, ok } from '@presentation/helpers'
+import { Create{{pascalCase name}}Protocol } from './protocols'
+import { Create{{pascalCase name}}Model } from '@usecases'
+import { errorToHttpResponse } from '@utils/error-handler'
+
+export class Create{{pascalCase name}}Controller implements Controller {
+  constructor(private readonly Create{{pascalCase name}}: Create{{pascalCase name}}Protocol) {}
+
+  async map({
+    {{listFields fields}}
+  }: Create{{pascalCase name}}Controller.Request): Promise<Create{{pascalCase name}}Model.Params> {
+    return { name, welcomeMessage, date }
+  }
+
+  async handle({
+    {{listFieldNames fields}}
+  }: Create{{pascalCase name}}Controller.Request): Promise<HttpResponse> {
+    try {
+      const params = await this.map({
+        {{listFields fields}}
+      })
+
+      const data = await this.Create{{pascalCase name}}.create(params)
+      return data ? ok(data) : noContent()
+    } catch (error: any) {
+      return errorToHttpResponse(error)
+    }
+  }
+}
+
+export namespace Create{{pascalCase name}}Controller {
+  /** This is the request received from the client */
+  export type Request = {
+    {{listFieldsTypescript fields}}
+  }
+}

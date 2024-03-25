@@ -1,0 +1,10 @@
+import { adaptRoute } from '@main/adapters'
+import { makeLoad{{pascalCase name}}DetailFactory } from '@main/factories'
+import { Router } from 'express'
+
+export default (router: Router): void => {
+  router.get(
+    '/{{kebabCase name}}/:id',
+    adaptRoute(makeLoad{{pascalCase name}}DetailFactory().makeController()),
+  )
+}

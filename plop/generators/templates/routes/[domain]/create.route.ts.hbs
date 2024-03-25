@@ -1,0 +1,87 @@
+import { adaptRoute } from '@main/adapters'
+import { makeCreate{{pascalCase name}}Factory } from '@main/factories'
+
+import { Router } from 'express'
+
+export default (router: Router): void => {
+  /**
+   * @openapi
+   * /api/{{kebabCase name}}:
+   *   post:
+   *     summary: Creates a {{pascalCase name}}
+   *     description: Creates a {{pascalCase name}}
+   *     security:
+   *        - bearerAuth: []
+   *     requestBody:
+   *       description: body of the request
+   *       required: true
+   *       content:
+   *         application/json:
+   *          schema:
+   *              type: object
+   *              properties:
+   *                  name:
+   *                      type: string
+   *                      description: The country's name.
+   *     responses:
+   *       200:
+   *         description: Returns the created record of {{pascalCase name}}
+   *         content:
+   *           application/json:
+   *             schema:
+   *                     type: object
+   *                     properties:
+   *                       name:
+   *                         type: string
+   *                         description: The country's name.
+   *                       id:
+   *                         type: string
+   *                         description: The country's id.
+   *                       createdat:
+   *                         type: string
+   *                         format: date-time
+   *                         description: The country's createdat.
+   *                       updatedat:
+   *                         type: string
+   *                         format: date-time
+   *                         description: The country's updatedat.
+   *                       createdBy:
+   *                         type: string
+   *                         description: The country's createdBy.
+   *                       lastUpdatedBy:
+   *                         type: string
+   *                         description: The country's lastUpdatedBy.
+   *       401:
+   *         description: Unauthorized
+   *         content:
+   *           application/json:
+   *             schema:
+   *                   type: object
+   *                   properties:
+   *                       error:
+   *                         type: string
+   *                         description: The error message
+   *       404:
+   *         description: Not Found
+   *         content:
+   *           application/json:
+   *             schema:
+   *                   type: object
+   *                   properties:
+   *                       error:
+   *                         type: string
+   *                         description: The validation message
+   *
+   *       500:
+   *         description: Internal Server Error
+   *         content:
+   *           application/json:
+   *             schema:
+   *                   type: object
+   *                   properties:
+   *                       error:
+   *                         type: string
+   *                         description: The error message
+   */
+  router.post('/{{kebabCase name}}', adaptRoute(makeCreate{{pascalCase name}}Factory().makeController()))
+}

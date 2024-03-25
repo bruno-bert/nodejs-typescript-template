@@ -1,0 +1,38 @@
+import { Controller } from '@presentation/protocols'
+
+import { Create{{pascalCase name}}MongoRepository } from '@infra'
+// import { Create{{pascalCase name}}PrismaRepository } from '@infra'
+
+import {
+  DbCreate{{pascalCase name}},
+  Create{{pascalCase name}}RepositoryProtocol,
+  Create{{pascalCase name}}Controller,
+  Create{{pascalCase name}}Protocol,
+} from '@usecases'
+import { AbstractFactory } from '../abstract-factory'
+
+export class Create{{pascalCase name}}Factory extends AbstractFactory<CreateRepositoryProtocol> {
+  // makePrismaRepository = (): Create{{pascalCase name}}RepositoryProtocol => {
+  //   const repository = new Create{{pascalCase name}}PrismaRepository()
+  //   return repository
+  // }
+
+  makeMongoRepository = (): Create{{pascalCase name}}RepositoryProtocol => {
+    const repository = new Create{{pascalCase name}}MongoRepository()
+    return repository
+  }
+
+  makeDbCreate{{pascalCase name}} = (): Create{{pascalCase name}}Protocol => {
+    const { repository, validator } = this.makeServiceInjections()
+    return new DbCreate{{pascalCase name}}(repository, validator)
+  }
+
+  makeController = (): Controller => {
+    const controller = new Create{{pascalCase name}}Controller(this.makeDbCreate{{pascalCase name}}())
+    return this.makeControllerWithDecorators(controller)
+  }
+}
+
+export const makeCreate{{pascalCase name}}Factory = () => {
+  return new Create{{pascalCase name}}Factory()
+}

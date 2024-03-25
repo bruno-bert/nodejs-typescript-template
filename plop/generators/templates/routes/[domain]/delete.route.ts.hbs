@@ -1,0 +1,10 @@
+import { adaptRoute } from '@main/adapters'
+import { makeDelete{{pascalCase name}}Factory } from '@main/factories'
+import { Router } from 'express'
+
+export default (router: Router): void => {
+  router.delete(
+    '/{{kebabCase name}}/:id',
+    adaptRoute(makeDelete{{pascalCase name}}Factory().makeController()),
+  )
+}

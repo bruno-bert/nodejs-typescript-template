@@ -1,0 +1,80 @@
+import { describe, expect, test, vi } from 'vitest'
+import { Create{{pascalCase name}}Spy, mockCreate{{pascalCase name}}Params, throwError } from '@test-mocks'
+
+import {
+  {{pascalCase name}}Model,
+  Create{{pascalCase name}}Controller,
+  MissingParamsError,
+} from '@usecases'
+
+type SutTypes = {
+  sut: Create{{pascalCase name}}Controller
+  service: Create{{pascalCase name}}Spy
+}
+const makeSut = (): SutTypes => {
+  const service = new Create{{pascalCase name}}Spy()
+  const sut = new Create{{pascalCase name}}Controller(service)
+  return {
+    sut,
+    service,
+  }
+}
+
+describe('Test Suite for create-{{kebabCase name}}-controller.spec', () => {
+  test('Ensure that create in service is called once and with same parameters', async () => {
+    const { sut, service } = makeSut()
+    const spy = vi
+      .spyOn(service, 'create')
+      .mockImplementation(() => Promise.resolve({} as {{pascalCase name}}Model))
+    const data = mockCreate{{pascalCase name}}Params()
+    await sut.handle(data)
+    expect(spy).toHaveBeenCalledOnce()
+    expect(spy).toHaveBeenCalledWith(data)
+  })
+
+  test('Ensure that map in controller is called once in handler and with same parameters', async () => {
+    const { sut } = makeSut()
+    const spy = vi
+      .spyOn(sut, 'map')
+      .mockImplementation(() => Promise.resolve({} as {{pascalCase name}}Model))
+    const data = mockCreate{{pascalCase name}}Params()
+    await sut.handle(data)
+    expect(spy).toHaveBeenCalledOnce()
+    expect(spy).toHaveBeenCalledWith(data)
+  })
+
+  test('Ensure that controller to return http response equals to 200 on success', async () => {
+    const { sut } = makeSut()
+    const data = mockCreate{{pascalCase name}}Params()
+    const result = await sut.handle(data)
+    expect(result.statusCode).toEqual(200)
+  })
+
+  test('Ensure that controller to return http response 204 when there is no data', async () => {
+    const { sut, service } = makeSut()
+    vi.spyOn(service, 'create').mockImplementationOnce(async () => {
+      return Promise.resolve(null as unknown as {{pascalCase name}}Model)
+    })
+    const data = mockCreate{{pascalCase name}}Params()
+    const result = await sut.handle(data)
+    expect(result.statusCode).toEqual(204)
+  })
+
+  test('Ensure that controller to return http response equals to 400 on MissingParamsError error', async () => {
+    const { sut, service } = makeSut()
+    vi.spyOn(service, 'create').mockImplementationOnce(() =>
+      throwError(new MissingParamsError('Error')),
+    )
+    const data = mockCreate{{pascalCase name}}Params()
+    const result = await sut.handle(data)
+    expect(result.statusCode).toEqual(400)
+  })
+
+  test('Ensure that controller to return http response equals to 500 on Unknown error', async () => {
+    const { sut, service } = makeSut()
+    vi.spyOn(service, 'create').mockImplementationOnce(() => throwError())
+    const data = mockCreate{{pascalCase name}}Params()
+    const result = await sut.handle(data)
+    expect(result.statusCode).toEqual(500)
+  })
+})

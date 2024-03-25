@@ -1,0 +1,38 @@
+import { Controller } from '@presentation/protocols'
+
+import { Load{{pascalCase name}}PagingMongoRepository } from '@infra'
+// import { Load{{pascalCase name}}PagingPrismaRepository } from '@infra'
+
+import {
+  DbLoad{{pascalCase name}}Paging,
+  Load{{pascalCase name}}PagingRepositoryProtocol,
+  Load{{pascalCase name}}PagingController,
+  Load{{pascalCase name}}PagingProtocol,
+} from '@usecases'
+import { AbstractFactory } from '../abstract-factory'
+
+export class Load{{pascalCase name}}PagingFactory extends AbstractFactory<Load{{pascalCase name}}PagingRepositoryProtocol> {
+  // makePrismaRepository = (): Load{{pascalCase name}}PagingRepositoryProtocol => {
+  //   const repository = new Load{{pascalCase name}}PagingPrismaRepository()
+  //   return repository
+  // }
+
+  makeMongoRepository = (): Load{{pascalCase name}}PagingRepositoryProtocol => {
+    const repository = new Load{{pascalCase name}}PagingMongoRepository()
+    return repository
+  }
+
+  makeDbLoad{{pascalCase name}}Paging = (): Load{{pascalCase name}}PagingProtocol => {
+    const { repository, validator } = this.makeServiceInjections()
+    return new DbLoad{{pascalCase name}}Paging(repository, validator)
+  }
+
+  makeController = (): Controller => {
+    const controller = new Load{{pascalCase name}}PagingController(this.makeDbLoad{{pascalCase name}}Paging())
+    return this.makeControllerWithDecorators(controller)
+  }
+}
+
+export const makeLoad{{pascalCase name}}PagingFactory = () => {
+  return new Load{{pascalCase name}}PagingFactory()
+}

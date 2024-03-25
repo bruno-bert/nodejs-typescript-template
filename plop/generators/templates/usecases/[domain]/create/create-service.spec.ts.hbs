@@ -1,0 +1,66 @@
+import { describe, expect, test, vi } from 'vitest'
+import {
+  Create{{pascalCase name}}RepositorySpy,
+  DataValidatorSpy,
+  mockCreate{{pascalCase name}}Params,
+  throwError,
+} from '@test-mocks'
+import { DbCreate{{pascalCase name}} } from './create-data-service'
+import { Create{{pascalCase name}}Error } from './errors'
+import { {{pascalCase name}}Model, Create{{pascalCase name}}RepositoryProtocol } from '@usecases'
+
+type SutTypes = {
+  sut: DbCreate{{pascalCase name}}
+  repository: Create{{pascalCase name}}RepositorySpy
+  validator: DataValidatorSpy<Create{{pascalCase name}}RepositoryProtocol.Params>
+}
+const makeSut = (): SutTypes => {
+  const repository = new Create{{pascalCase name}}RepositorySpy()
+  const validator = new DataValidatorSpy()
+  const sut = new DbCreate{{pascalCase name}}(repository, validator)
+  return {
+    sut,
+    repository,
+    validator,
+  }
+}
+
+describe('Test Suite for create-{{kebalCase name}}-service.spec', () => {
+  test('Ensure that create in repository is called once and with same parameters', async () => {
+    const { sut, repository } = makeSut()
+    const spy = vi
+      .spyOn(repository, 'create')
+      .mockImplementation(() => Promise.resolve({} as {{pascalCase name}}Model))
+    const data = mockCreate{{pascalCase name}}Params()
+    await sut.create(data)
+    expect(spy).toHaveBeenCalledOnce()
+    expect(spy).toHaveBeenCalledWith(data)
+  })
+
+  test('Ensure that validate in validator is called once', async () => {
+    const { sut, validator } = makeSut()
+    const spy = vi
+      .spyOn(validator, 'validate')
+      .mockImplementation(() => Promise.resolve({ success: true } as any))
+    const values = mockCreate{{pascalCase name}}Params()
+    await sut.create(values)
+    expect(spy).toHaveBeenCalledOnce()
+  })
+
+  test('Ensure that create data service to throw a Custom Create{{pascalCase name}}Error when repository throws', async () => {
+    const { sut, repository } = makeSut()
+    vi.spyOn(repository, 'create').mockImplementationOnce(() =>
+      throwError(new Create{{pascalCase name}}Error('Error')),
+    )
+    const data = mockCreate{{pascalCase name}}Params()
+    const promise = sut.create(data)
+    await expect(promise).rejects.toThrowError(Create{{pascalCase name}}Error)
+  })
+
+  test('Ensure that create service returns exactly what the repository returns', async () => {
+    const { sut, repository } = makeSut()
+    const data = mockCreate{{pascalCase name}}Params()
+    const result = await sut.create(data)
+    expect(result).toEqual(repository.result)
+  })
+})

@@ -1,0 +1,192 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  randFullName,
+  randGitCommitMessage,
+  randRecentDate,
+  randText,
+  randUuid,
+  randWord,
+} from '@ngneat/falso'
+
+import {
+  Create{{pascalCase name}}Model,
+  {{pascalCase name}}Model,
+  Load{{pascalCase name}}DetailRepositoryProtocol,
+  Load{{pascalCase name}}PagingRepositoryProtocol,
+  Load{{pascalCase name}}RepositoryProtocol,
+  Edit{{pascalCase name}}RepositoryProtocol,
+  Create{{pascalCase name}}RepositoryProtocol,
+  Delete{{pascalCase name}}RepositoryProtocol,
+  Edit{{pascalCase name}}Model,
+  Create{{pascalCase name}}Protocol,
+  Edit{{pascalCase name}}Protocol,
+  Delete{{pascalCase name}}Protocol,
+  Delete{{pascalCase name}}Model,
+  Load{{pascalCase name}}Protocol,
+  Load{{pascalCase name}}PagingProtocol,
+  Load{{pascalCase name}}DetailProtocol,
+} from '@usecases'
+import { ValidatorProtocol } from '@utils'
+
+export const mockCreate{{pascalCase name}}Params = (): Create{{pascalCase name}}Model.Params => ({
+  {{mockFields fields}}
+})
+
+export const mockEdit{{pascalCase name}}Params = (id: string): Edit{{pascalCase name}}Model.Params => ({
+  id,
+  {{mockFields fields}}
+})
+
+export const mock{{pascalCase name}}Model = (): {{pascalCase name}}Model => {
+  return {
+    id: randUuid(),
+    {{mockFields fields}}
+  }
+}
+
+export const mockLoad{{pascalCase name}}Params = (): {{pascalCase name}}Model[] => {
+  return [
+    {
+      id: randUuid(),
+      {{mockFields fields}}
+    },
+    {
+      id: randUuid(),
+      {{mockFields fields}}
+    },
+  ]
+}
+
+export class Create{{pascalCase name}}Spy implements Create{{pascalCase name}}Protocol {
+  async map(params: Create{{pascalCase name}}Model.Params): Promise<Create{{pascalCase name}}Model.Params> {
+    return Promise.resolve(params)
+  }
+
+  result = mock{{pascalCase name}}Model()
+
+  async create(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    params: Create{{pascalCase name}}Model.Params,
+  ): Promise<Create{{pascalCase name}}Protocol.Result> {
+    return this.result
+  }
+}
+export class Edit{{pascalCase name}}Spy implements Edit{{pascalCase name}}Protocol {
+  result = mockEdit{{pascalCase name}}Params('1')
+
+  async edit(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    id: string,
+    params: Edi{{pascalCase name}}Model.Params,
+  ): Promise<Edit{{pascalCase name}}Protocol.Result> {
+    return this.result
+  }
+}
+
+export class Load{{pascalCase name}}Spy implements Load{{pascalCase name}}Protocol {
+  result = [mock{{pascalCase name}}Model(), mock{{pascalCase name}}Model()]
+  load(): Promise<Load{{pascalCase name}}Protocol.Result> {
+    return Promise.resolve(this.result)
+  }
+}
+
+export class Load{{pascalCase name}}PagingSpy implements Load{{pascalCase name}}PagingProtocol {
+  result = [mock{{pascalCase name}}Model(), mock{{pascalCase name}}Model()]
+  loadPaging(): Promise<Load{{pascalCase name}}PagingProtocol.Result> {
+    return Promise.resolve(this.result)
+  }
+}
+
+export class Load{{pascalCase name}}DetailSpy implements Load{{pascalCase name}}DetailProtocol {
+  result = mock{{pascalCase name}}Model()
+  load(): Promise<Load{{pascalCase name}}DetailProtocol.Result> {
+    return Promise.resolve(this.result)
+  }
+}
+
+export class Delete{{pascalCase name}}Spy implements Delete{{pascalCase name}}Protocol {
+  async map(params: Delete{{pascalCase name}}Model.Params): Promise<Delete{{pascalCase name}}Model.Params> {
+    return Promise.resolve({ id: params.id })
+  }
+
+  result = { success: true, count: 1 }
+
+  async delete(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    params: Delete{{pascalCase name}}Model.Params,
+  ): Promise<Delete{{pascalCase name}}Protocol.Result> {
+    return this.result
+  }
+}
+
+export class Load{{pascalCase name}}RepositorySpy implements Load{{pascalCase name}}RepositoryProtocol {
+  result = [mock{{pascalCase name}}Model()]
+
+  async loadAll(): Promise<Load{{pascalCase name}}RepositoryProtocol.Result> {
+    return this.result
+  }
+}
+
+export class Load{{pascalCase name}}DetailRepositorySpy
+  implements Load{{pascalCase name}}DetailRepositoryProtocol
+{
+  result = mock{{pascalCase name}}Model()
+
+  async loadById(): Promise<Load{{pascalCase name}}DetailRepositoryProtocol.Result> {
+    return this.result
+  }
+}
+
+export class Edit{{pascalCase name}}RepositorySpy implements Edit{{pascalCase name}}RepositoryProtocol {
+  result: {{pascalCase name}}Model | null = null
+  async edit(
+    id: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    params: Edit{{pascalCase name}}RepositoryProtocol.Params,
+  ): Promise<Edit{{pascalCase name}}RepositoryProtocol.Result> {
+    this.result = mockEdit{{pascalCase name}}Params(id)
+    return { ...this.result, id: '1' }
+  }
+}
+
+export class Create{{pascalCase name}}RepositorySpy implements Create{{pascalCase name}}RepositoryProtocol {
+  result = mock{{pascalCase name}}Model()
+
+  async create(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    params: Create{{pascalCase name}}RepositoryProtocol.Params,
+  ): Promise<Create{{pascalCase name}}RepositoryProtocol.Result> {
+    return this.result
+  }
+}
+
+
+export class Delete{{pascalCase name}}RepositorySpy implements Delete{{pascalCase name}}RepositoryProtocol {
+  result = { success: true, count: 1 }
+
+  async delete({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    id,
+  }: Delete{{pascalCase name}}RepositoryProtocol.Params): Promise<Delete{{pascalCase name}}RepositoryProtocol.Result> {
+    return { success: true, count: 1 }
+  }
+}
+
+export class Load{{pascalCase name}}PagingRepositorySpy
+  implements Load{{pascalCase name}}PagingRepositoryProtocol
+{
+  result = [mock{{pascalCase name}}Model()]
+
+  async loadPaging(): Promise<Load{{pascalCase name}}PagingRepositoryProtocol.Result> {
+    return this.result
+  }
+}
+
+
+export class {{pascalCase name}}ValidatorSpy<T> implements ValidatorProtocol<T> {
+  validate(schema: object, values: any): Promise<ValidatorProtocol.Result> {
+    return Promise.resolve({
+      success: true,
+    })
+  }
+}

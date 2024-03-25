@@ -6,8 +6,6 @@ Repository: https://github.com/bruno-bert/nodejs-typescript-template.git
 
 ## Immediate NEXT STEPS
 
-- [ ] automatically generate OpenApi Spec
-- [ ] automatically generate OpenApi Documentation
 
 
 ### Project Setup

@@ -1,0 +1,12 @@
+import { {{pascalCase name}}Model, Create{{pascalCase name}}Model } from '@usecases'
+
+export interface Create{{pascalCase name}}RepositoryProtocol {
+  create: (
+    params: Creat{{pascalCase name}}RepositoryProtocol.Params,
+  ) => Promise<Create{{pascalCase name}}RepositoryProtocol.Result>
+}
+
+export namespace Create{{pascalCase name}}RepositoryProtocol {
+  export type Result = {{pascalCase name}}Model
+  export type Params = Create{{pascalCase name}}Model.Params
+}

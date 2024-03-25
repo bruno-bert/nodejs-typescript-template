@@ -1,0 +1,38 @@
+import { Controller } from '@presentation/protocols'
+
+import { Edit{{pascalCase name}}MongoRepository } from '@infra'
+// import { Edit{{pascalCase name}}PrismaRepository } from '@infra'
+
+import {
+  DbEdit{{pascalCase name}},
+  Edit{{pascalCase name}}RepositoryProtocol,
+  Edit{{pascalCase name}}Controller,
+  Edit{{pascalCase name}}Protocol,
+} from '@usecases'
+import { AbstractFactory } from '../abstract-factory'
+
+export class Edit{{pascalCase name}}Factory extends AbstractFactory<Edit{{pascalCase name}}RepositoryProtocol> {
+  // makePrismaRepository = (): Edit{{pascalCase name}}RepositoryProtocol => {
+  //   const repository = new Edit{{pascalCase name}}PrismaRepository()
+  //   return repository
+  // }
+
+  makeMongoRepository = (): Edit{{pascalCase name}}RepositoryProtocol => {
+    const repository = new Edit{{pascalCase name}}MongoRepository()
+    return repository
+  }
+
+  makeDbEdit{{pascalCase name}} = (): Edit{{pascalCase name}}Protocol => {
+    const { repository, validator } = this.makeServiceInjections()
+    return new DbEdit{{pascalCase name}}(repository, validator)
+  }
+
+  makeController = (): Controller => {
+    const controller = new Edit{{pascalCase name}}Controller(this.makeDbEdit{{pascalCase name}}())
+    return this.makeControllerWithDecorators(controller)
+  }
+}
+
+export const makeEdit{{pascalCase name}}Factory = () => {
+  return new Edit{{pascalCase name}}Factory()
+}

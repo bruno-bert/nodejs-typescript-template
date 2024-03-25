@@ -1,0 +1,5 @@
+export * from '@main/factories/data/edit-data-factory'
+export * from './delete-data-controller'
+export * from './delete-data-model'
+export * from './delete-data-service'
+export * from './protocols'

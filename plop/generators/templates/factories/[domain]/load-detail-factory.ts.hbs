@@ -1,0 +1,38 @@
+import { Controller } from '@presentation/protocols'
+
+import { Load{{pascalCase name}}DetailMongoRepository } from '@infra'
+// import { Load{{pascalCase name}}DetailPrismaRepository } from '@infra'
+
+import {
+  DbLoad{{pascalCase name}}Detail,
+  Load{{pascalCase name}}DetailRepositoryProtocol,
+  Load{{pascalCase name}}DetailController,
+  Load{{pascalCase name}}DetailProtocol,
+} from '@usecases'
+import { AbstractFactory } from '../abstract-factory'
+
+export class Load{{pascalCase name}}DetailFactory extends AbstractFactory<Load{{pascalCase name}}DetailRepositoryProtocol> {
+  // makePrismaRepository = (): Load{{pascalCase name}}DetailRepositoryProtocol => {
+  //   const repository = new Load{{pascalCase name}}DetailPrismaRepository()
+  //   return repository
+  // }
+
+  makeMongoRepository = (): Load{{pascalCase name}}DetailRepositoryProtocol => {
+    const repository = new Load{{pascalCase name}}DetailMongoRepository()
+    return repository
+  }
+
+  makeDbLoad{{pascalCase name}}Detail = (): Load{{pascalCase name}}DetailProtocol => {
+    const { repository, validator } = this.makeServiceInjections()
+    return new DbLoad{{pascalCase name}}Detail(repository, validator)
+  }
+
+  makeController = (): Controller => {
+    const controller = new Load{{pascalCase name}}DetailController(this.makeDbLoad{{pascalCase name}}Detail())
+    return this.makeControllerWithDecorators(controller)
+  }
+}
+
+export const makeLoad{{pascalCase name}}DetailFactory = () => {
+  return new Load{{pascalCase name}}DetailFactory()
+}

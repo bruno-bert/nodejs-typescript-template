@@ -1,0 +1,38 @@
+import { Controller } from '@presentation/protocols'
+
+import { Delete{{pascalCase name}}MongoRepository } from '@infra'
+// import { Delete{{pascalCase name}}PrismaRepository } from '@infra'
+
+import {
+  DbDelete{{pascalCase name}},
+  Delete{{pascalCase name}}RepositoryProtocol,
+  Delete{{pascalCase name}}Controller,
+  Delete{{pascalCase name}}Protocol,
+} from '@usecases'
+import { AbstractFactory } from '../abstract-factory'
+
+export class Delete{{pascalCase name}}Factory extends AbstractFactory<Delete{{pascalCase name}}RepositoryProtocol> {
+  // makePrismaRepository = (): Delete{{pascalCase name}}RepositoryProtocol => {
+  //   const repository = new Delete{{pascalCase name}}PrismaRepository()
+  //   return repository
+  // }
+
+  makeMongoRepository = (): Delete{{pascalCase name}}RepositoryProtocol => {
+    const repository = new Delete{{pascalCase name}}MongoRepository()
+    return repository
+  }
+
+  makeDbDelete{{pascalCase name}} = (): Delete{{pascalCase name}}Protocol => {
+    const { repository, validator } = this.makeServiceInjections()
+    return new DbDelete{{pascalCase name}}(repository, validator)
+  }
+
+  makeController = (): Controller => {
+    const controller = new Delete{{pascalCase name}}Controller(this.makeDbDelete{{pascalCase name}}())
+    return this.makeControllerWithDecorators(controller)
+  }
+}
+
+export const makeDelete{{pascalCase name}}Factory = () => {
+  return new Delete{{pascalCase name}}Factory()
+}

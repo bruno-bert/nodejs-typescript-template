@@ -1,0 +1,13 @@
+export class Create{{pascalCase name}}Error extends Error {
+  constructor(error: string) {
+    super(`Error on creating {{kebabCase name}}: ${error}`)
+    this.name = 'Create{{pascalCase name}}Error'
+  }
+}
+
+export class DatabaseCreate{{pascalCase name}}Error extends Error {
+  constructor(error: string) {
+    super(`Error on creating {{kebabCase name}} in database: ${error}`)
+    this.name = 'DatabaseCreate{{pascalCase name}}Error'
+  }
+}
