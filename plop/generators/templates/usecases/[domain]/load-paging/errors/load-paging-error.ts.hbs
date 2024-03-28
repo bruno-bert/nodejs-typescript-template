@@ -1,13 +1,13 @@
-export class LoadDataPagingError extends Error {
+export class Load{{pascalCase name}}PagingError extends Error {
   constructor(error: string) {
-    super(`Error on loading data paging: ${error}`)
-    this.name = 'LoadDataPagingError'
+    super(`Error on loading {{kebabCase name}} paging: ${error}`)
+    this.name = 'Load{{pascalCase name}}PagingError'
   }
 }
 
-export class DatabaseLoadDataPagingError extends Error {
+export class DatabaseLoad{{pascalCase name}}PagingError extends Error {
   constructor(error: string) {
-    super(`Error on loading data paging in database: ${error}`)
-    this.name = 'DatabaseLoadDataPagingError'
+    super(`Error on loading {{kebabCase name}} paging in database: ${error}`)
+    this.name = 'DatabaseLoad{{pascalCase name}}PagingError'
   }
 }

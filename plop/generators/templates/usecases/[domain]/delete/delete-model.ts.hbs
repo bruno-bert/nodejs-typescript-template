@@ -1,7 +1,7 @@
-import { AnyDataModel } from '@usecases'
+import { {{pascalCase name}}Model } from '@usecases'
 
-export type DeleteDataModel = AnyDataModel
+export type Delete{{pascalCase name}}Model = {{pascalCase name}}Model
 
-export namespace DeleteDataModel {
+export namespace Delete{{pascalCase name}}Model {
   export type Params = { id: string }
 }

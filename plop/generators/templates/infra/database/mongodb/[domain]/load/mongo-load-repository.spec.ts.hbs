@@ -1,0 +1,35 @@
+import { describe, expect, test, afterAll, beforeEach } from 'vitest'
+import { Load{{pascalCase name}}MongoRepository } from './mongo-load-{{kebabCase name}}-repository'
+import { MongoHelper } from '../../utils'
+import { Collection } from 'mongodb'
+import { mockCreate{{pascalCase name}}Params } from '@test-mocks'
+
+const makeSut = () => {
+  return {
+    sut: new Load{{pascalCase name}}MongoRepository(),
+  }
+}
+
+let {{pascalCase name}}Collection: Collection
+
+afterAll(async () => {
+  await MongoHelper.disconnect()
+})
+
+beforeEach(async () => {
+  await MongoHelper.connect((globalThis as any).__MONGO_URI__)
+  {{pascalCase name}}Collection = await MongoHelper.getCollection('{{kebabCase name}}')
+  await {{pascalCase name}}Collection.deleteMany({})
+})
+
+describe('Test Suite for mongo-load-{{kebabCase name}}-repository.spec', () => {
+  test('Ensure that load {{kebabCase name}} will return items', async () => {
+    const add{{pascalCase name}}Models = [mockCreate{{pascalCase name}}Params(), mockCreate{{pascalCase name}}Params()]
+    await {{pascalCase name}}Collection.insertMany(add{{pascalCase name}}Models)
+
+    const { sut } = makeSut()
+    const result = await sut.loadAll()
+
+    expect(result.length).toEqual(2)
+  })
+})

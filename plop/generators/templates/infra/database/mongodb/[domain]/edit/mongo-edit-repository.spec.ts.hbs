@@ -1,0 +1,40 @@
+import { describe, expect, test, afterAll, beforeEach } from 'vitest'
+import { Edit{{pascalCase name}}MongoRepository } from './mongo-edit-{{kebabCase name}}-repository'
+import { MongoHelper } from '../../utils'
+import { Collection, ObjectId } from 'mongodb'
+import { mockCreate{{pascalCase name}}Params, mockEdit{{pascalCase name}}Params } from '@test-mocks'
+
+const makeSut = () => {
+  return {
+    sut: new Edit{{pascalCase name}}MongoRepository(),
+  }
+}
+
+let {{pascalCase name}}Collection: Collection
+
+afterAll(async () => {
+  await MongoHelper.disconnect()
+})
+
+beforeEach(async () => {
+  await MongoHelper.connect((globalThis as any).__MONGO_URI__)
+  {{pascalCase name}}Collection = await MongoHelper.getCollection('{{kebabCase name}}')
+  await {{pascalCase name}}Collection.deleteMany({})
+})
+
+describe('Test Suite for mongo-edit-{{kebabCase name}}-repository.spec', () => {
+  test('Ensure that edit {{kebabCase name}} will return required id and updated params', async () => {
+    const itemToInsert = mockCreate{{pascalCase name}}Params()
+    const document = await {{pascalCase name}}Collection.insertOne(itemToInsert)
+    const { sut } = makeSut()
+    const id = String(document.insertedId)
+    const item = mockEdit{{pascalCase name}}Params(id)
+    const result = await sut.edit(id, item)
+    
+    expect(result.id).toEqual(new ObjectId(id))
+    
+    {{listFieldsForTests fields}}
+ 
+
+  })
+})

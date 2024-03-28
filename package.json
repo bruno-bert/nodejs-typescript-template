@@ -15,8 +15,10 @@
     "lint": "eslint src/** --fix --no-error-on-unmatched-pattern",
     "docker:build": "docker build -t my-mongodb .",
     "docker:run": "docker run -d --name my-mongodb-container -p 27017:27017 my-mongodb",
+    "generate:docs": "node scripts/create-open-api.js",
     "prepare": "husky",
-    "generate": "plop --plopfile plop/generators/plopfile.js --force && npm run lint"
+    "fix-after": "node scripts/fix-single-quotes.js",
+    "generate": "plop --plopfile plop/generators/plopfile.js --force && npm run fix-after && npm run lint && vitest run && npm run generate:docs"
   },
   "keywords": [],
   "author": "",

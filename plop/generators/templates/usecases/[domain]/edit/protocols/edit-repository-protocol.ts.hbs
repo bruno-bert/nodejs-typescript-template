@@ -1,13 +1,13 @@
-import { AnyDataModel, EditDataModel } from '@usecases'
+import { {{pascalCase name}}Model, Edit{{pascalCase name}}Model } from '@usecases'
 
-export interface EditDataRepositoryProtocol {
+export interface Edit{{pascalCase name}}RepositoryProtocol {
   edit: (
     id: string,
-    params: EditDataRepositoryProtocol.Params,
-  ) => Promise<EditDataRepositoryProtocol.Result>
+    params: Edit{{pascalCase name}}RepositoryProtocol.Params,
+  ) => Promise<Edit{{pascalCase name}}RepositoryProtocol.Result>
 }
 
-export namespace EditDataRepositoryProtocol {
-  export type Result = AnyDataModel
-  export type Params = EditDataModel.Params
+export namespace Edit{{pascalCase name}}RepositoryProtocol {
+  export type Result = {{pascalCase name}}Model
+  export type Params = Edit{{pascalCase name}}Model.Params
 }

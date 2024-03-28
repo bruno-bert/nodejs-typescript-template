@@ -1,26 +1,26 @@
-export class DeleteDataError extends Error {
+export class Delete{{pascalCase name}}Error extends Error {
   constructor(error: string) {
-    super(`Error on deleting data: ${error}`)
-    this.name = 'DeleteDataError'
+    super(`Error on deleting {{kebabCase name}}: ${error}`)
+    this.name = 'Delete{{pascalCase name}}Error'
   }
 }
 
-export class DeleteDataNotFoundError extends Error {
+export class Delete{{pascalCase name}}NotFoundError extends Error {
   constructor(error: string) {
-    super(`Error on deleting data: ${error}`)
-    this.name = 'DeleteDataNotFoundError'
+    super(`Error on deleting {{kebabCase name}}: ${error}`)
+    this.name = 'Delete{{pascalCase name}}NotFoundError'
   }
 }
 
-export class DatabaseDeleteDataError extends DeleteDataError {
+export class DatabaseDelete{{pascalCase name}}Error extends Delete{{pascalCase name}}Error {
   constructor(error: string) {
-    super(`Error on deleting data in repository: ${error}`)
-    this.name = 'DeleteDataNotFoundError'
+    super(`Error on deleting {{kebabCase name}} in repository: ${error}`)
+    this.name = 'Delete{{pascalCase name}}NotFoundError'
   }
 }
-export class DatabaseDeleteDataNotFoundError extends DeleteDataNotFoundError {
+export class DatabaseDelete{{pascalCase name}}NotFoundError extends Delete{{pascalCase name}}NotFoundError {
   constructor(error: string) {
-    super(`Error on deleting data in repository: ${error}`)
-    this.name = 'DeleteDataNotFoundError'
+    super(`Error on deleting {{kebabCase name}} in repository: ${error}`)
+    this.name = 'Delete{{pascalCase name}}NotFoundError'
   }
 }

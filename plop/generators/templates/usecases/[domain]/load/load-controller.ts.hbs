@@ -1,15 +1,15 @@
 import { Controller, HttpResponse } from '@presentation/protocols'
 import { noContent, ok } from '@presentation/helpers'
-import { LoadDataProtocol } from './protocols'
+import { Load{{pascalCase name}}Protocol } from './protocols'
 import { errorToHttpResponse } from '@utils/error-handler'
 
-export class LoadDataController implements Controller {
-  constructor(private readonly loadData: LoadDataProtocol) {}
+export class Load{{pascalCase name}}Controller implements Controller {
+  constructor(private readonly Load{{pascalCase name}}: Load{{pascalCase name}}Protocol) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async handle(request: LoadDataController.Request): Promise<HttpResponse> {
+  async handle(request: Load{{pascalCase name}}Controller.Request): Promise<HttpResponse> {
     try {
-      const data = await this.loadData.load()
+      const data = await this.Load{{pascalCase name}}.load()
       return data ? ok(data) : noContent()
     } catch (error: any) {
       return errorToHttpResponse(error)
@@ -17,8 +17,6 @@ export class LoadDataController implements Controller {
   }
 }
 
-export namespace LoadDataController {
-  export type Request = {
-    accountId: string
-  }
+export namespace Load{{pascalCase name}}Controller {
+  export type Request = Record<string, never>
 }

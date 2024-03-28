@@ -1,22 +1,22 @@
 import { ValidatorProtocol } from '@utils'
-import { LoadDataPagingError } from './errors'
+import { Load{{pascalCase name}}PagingError } from './errors'
 import {
-  LoadDataPagingProtocol,
-  LoadDataPagingRepositoryProtocol,
+  Load{{pascalCase name}}PagingProtocol,
+  Load{{pascalCase name}}PagingRepositoryProtocol,
 } from './protocols'
 
-export class DbLoadDataPaging implements LoadDataPagingProtocol {
+export class DbLoad{{pascalCase name}}Paging implements Load{{pascalCase name}}PagingProtocol {
   constructor(
-    private readonly loadDataPagingRepository: LoadDataPagingRepositoryProtocol,
-    private readonly loadDataPagingValidator: ValidatorProtocol<LoadDataPagingRepositoryProtocol.Params>,
+    private readonly Load{{pascalCase name}}PagingRepository: Load{{pascalCase name}}PagingRepositoryProtocol,
+    private readonly Load{{pascalCase name}}PagingValidator: ValidatorProtocol<Load{{pascalCase name}}PagingRepositoryProtocol.Params>,
   ) {}
 
-  async loadPaging(): Promise<LoadDataPagingProtocol.Result> {
+  async loadPaging(): Promise<Load{{pascalCase name}}PagingProtocol.Result> {
     try {
-      // this.loadDataPagingValidator.validate(null, {})
-      return await this.loadDataPagingRepository.loadPaging()
+      // this.Load{{pascalCase name}}PagingValidator.validate(null, {})
+      return await this.Load{{pascalCase name}}PagingRepository.loadPaging()
     } catch (error) {
-      throw new LoadDataPagingError(error as unknown as string)
+      throw new Load{{pascalCase name}}PagingError(error as unknown as string)
     }
   }
 }

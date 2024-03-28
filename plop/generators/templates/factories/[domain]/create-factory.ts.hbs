@@ -1,7 +1,8 @@
 import { Controller } from '@presentation/protocols'
 
-import { Create{{pascalCase name}}MongoRepository } from '@infra'
-// import { Create{{pascalCase name}}PrismaRepository } from '@infra'
+import { Create{{pascalCase name}}MongoRepository } from '@infra/database/mongodb/{{kebabCase name}}'
+  
+// import { Create{{pascalCase name}}PrismaRepository } from '@infra/database/prisma/{{kebabCase name}}'
 
 import {
   DbCreate{{pascalCase name}},
@@ -11,7 +12,7 @@ import {
 } from '@usecases'
 import { AbstractFactory } from '../abstract-factory'
 
-export class Create{{pascalCase name}}Factory extends AbstractFactory<CreateRepositoryProtocol> {
+export class Create{{pascalCase name}}Factory extends AbstractFactory<Create{{pascalCase name}}RepositoryProtocol> {
   // makePrismaRepository = (): Create{{pascalCase name}}RepositoryProtocol => {
   //   const repository = new Create{{pascalCase name}}PrismaRepository()
   //   return repository

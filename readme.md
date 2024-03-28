@@ -4,10 +4,6 @@ Repository: https://github.com/bruno-bert/nodejs-typescript-template.git
 
 ## What this repository has:
 
-## Immediate NEXT STEPS
-
-
-
 ### Project Setup
 - Husky for Formatted Commit messages 
 - Vitest for Unit Tests and Coverage - with In-Memory MongoDB

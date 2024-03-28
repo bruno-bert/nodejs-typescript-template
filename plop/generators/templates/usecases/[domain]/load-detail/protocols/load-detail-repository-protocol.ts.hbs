@@ -1,10 +1,10 @@
-import { AnyDataModel } from '@usecases'
+import { {{pascalCase name}}Model } from '@usecases'
 
-export interface LoadDataDetailRepositoryProtocol {
-  loadById: (id: string) => Promise<LoadDataDetailRepositoryProtocol.Result>
+export interface Load{{pascalCase name}}DetailRepositoryProtocol {
+  loadById: (id: string) => Promise<Load{{pascalCase name}}DetailRepositoryProtocol.Result>
 }
 
-export namespace LoadDataDetailRepositoryProtocol {
+export namespace Load{{pascalCase name}}DetailRepositoryProtocol {
   export type Params = { id: string }
-  export type Result = AnyDataModel
+  export type Result = {{pascalCase name}}Model
 }

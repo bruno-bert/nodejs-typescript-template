@@ -1,12 +1,12 @@
-import { DeleteDataModel } from '@usecases'
+import { Delete{{pascalCase name}}Model } from '@usecases'
 
-export interface DeleteDataRepositoryProtocol {
+export interface Delete{{pascalCase name}}RepositoryProtocol {
   delete: (
-    params: DeleteDataRepositoryProtocol.Params,
-  ) => Promise<DeleteDataRepositoryProtocol.Result>
+    params: Delete{{pascalCase name}}RepositoryProtocol.Params,
+  ) => Promise<Delete{{pascalCase name}}RepositoryProtocol.Result>
 }
 
-export namespace DeleteDataRepositoryProtocol {
+export namespace Delete{{pascalCase name}}RepositoryProtocol {
   export type Result = { success: boolean; count: number }
-  export type Params = DeleteDataModel.Params
+  export type Params = Delete{{pascalCase name}}Model.Params
 }

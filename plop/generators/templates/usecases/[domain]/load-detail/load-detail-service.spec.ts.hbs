@@ -1,23 +1,23 @@
 import { describe, expect, test, vi } from 'vitest'
 import {
   DataValidatorSpy,
-  LoadDataDetailRepositorySpy,
+  Load{{pascalCase name}}DetailRepositorySpy,
   throwError,
 } from '@test-mocks'
-import { DbLoadDataDetail } from './load-data-detail-service'
-import { LoadDataDetailError } from './errors'
-import { AnyDataModel } from '../data-model'
-import { LoadDataDetailRepositoryProtocol } from './protocols'
+import { DbLoad{{pascalCase name}}Detail } from './load-{{kebabCase name}}-detail-service'
+import { Load{{pascalCase name}}DetailError } from './errors'
+import { {{pascalCase name}}Model } from '../{{kebabCase name}}-model'
+import { Load{{pascalCase name}}DetailRepositoryProtocol } from './protocols'
 
 type SutTypes = {
-  sut: DbLoadDataDetail
-  repository: LoadDataDetailRepositorySpy
-  validator: DataValidatorSpy<LoadDataDetailRepositoryProtocol.Params>
+  sut: DbLoad{{pascalCase name}}Detail
+  repository: Load{{pascalCase name}}DetailRepositorySpy
+  validator: DataValidatorSpy<Load{{pascalCase name}}DetailRepositoryProtocol.Params>
 }
 const makeSut = (): SutTypes => {
-  const repository = new LoadDataDetailRepositorySpy()
+  const repository = new Load{{pascalCase name}}DetailRepositorySpy()
   const validator = new DataValidatorSpy()
-  const sut = new DbLoadDataDetail(repository, validator)
+  const sut = new DbLoad{{pascalCase name}}Detail(repository, validator)
   return {
     sut,
     repository,
@@ -25,12 +25,12 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('Test Suite for load-data-detail-service.spec', () => {
+describe('Test Suite for load-{{kebabCase name}}-detail-service.spec', () => {
   test('Ensure that load in repository is called once and with same parameters', async () => {
     const { sut, repository } = makeSut()
     const spy = vi
       .spyOn(repository, 'loadById')
-      .mockImplementation(() => Promise.resolve({} as AnyDataModel))
+      .mockImplementation(() => Promise.resolve({} as {{pascalCase name}}Model))
     const id = '1'
     await sut.load(id)
     expect(spy).toHaveBeenCalledOnce()
@@ -46,16 +46,16 @@ describe('Test Suite for load-data-detail-service.spec', () => {
     expect(spy).toHaveBeenCalledOnce()
   })
 
-  test('Ensure that load data detail service to throw a Custom LoadDataDetailError when repository throws', async () => {
+  test('Ensure that load {{kebabCase name}} detail service to throw a Custom Load{{pascalCase name}}DetailError when repository throws', async () => {
     const { sut, repository } = makeSut()
     vi.spyOn(repository, 'loadById').mockImplementationOnce(() =>
-      throwError(new LoadDataDetailError('Error')),
+      throwError(new Load{{pascalCase name}}DetailError('Error')),
     )
     const promise = sut.load('1')
-    await expect(promise).rejects.toThrowError(LoadDataDetailError)
+    await expect(promise).rejects.toThrowError(Load{{pascalCase name}}DetailError)
   })
 
-  test('Ensure that load data detail service returns exactly what the repository returns', async () => {
+  test('Ensure that load {{kebabCase name}} detail service returns exactly what the repository returns', async () => {
     const { sut, repository } = makeSut()
     const result = await sut.load('1')
     expect(result).toEqual(repository.result)

@@ -1,39 +1,39 @@
 import { describe, expect, test, vi } from 'vitest'
-import { LoadDataPagingSpy, throwError } from '@test-mocks'
+import { Load{{pascalCase name}}PagingSpy, throwError } from '@test-mocks'
 
 import {
-  AnyDataModel,
-  LoadDataPagingController,
+  {{pascalCase name}}Model,
+  Load{{pascalCase name}}PagingController,
   MissingParamsError,
 } from '@usecases'
 
 type SutTypes = {
-  sut: LoadDataPagingController
-  service: LoadDataPagingSpy
+  sut: Load{{pascalCase name}}PagingController
+  service: Load{{pascalCase name}}PagingSpy
 }
 const makeSut = (): SutTypes => {
-  const service = new LoadDataPagingSpy()
-  const sut = new LoadDataPagingController(service)
+  const service = new Load{{pascalCase name}}PagingSpy()
+  const sut = new Load{{pascalCase name}}PagingController(service)
   return {
     sut,
     service,
   }
 }
 
-describe('Test Suite for load-data-paging-service.spec', () => {
-  test('Ensure that load data paging in service is called once and with same parameters', async () => {
+describe('Test Suite for load-{{kebabCase name}}-paging-service.spec', () => {
+  test('Ensure that load {{kebabCase name}} paging in service is called once and with same parameters', async () => {
     const { sut, service } = makeSut()
     const spy = vi
       .spyOn(service, 'loadPaging')
-      .mockImplementation(() => Promise.resolve([] as AnyDataModel[]))
-    const data = {} as LoadDataPagingController.Request
+      .mockImplementation(() => Promise.resolve([] as {{pascalCase name}}Model[]))
+    const data = {} as Load{{pascalCase name}}PagingController.Request
     await sut.handle(data)
     expect(spy).toHaveBeenCalledOnce()
   })
 
   test('Ensure that controller to return http response equals to 200 on success', async () => {
     const { sut } = makeSut()
-    const data = {} as LoadDataPagingController.Request
+    const data = {} as Load{{pascalCase name}}PagingController.Request
     const result = await sut.handle(data)
     expect(result.statusCode).toEqual(200)
   })
@@ -41,9 +41,9 @@ describe('Test Suite for load-data-paging-service.spec', () => {
   test('Ensure that controller to return http response 204 when there is no data', async () => {
     const { sut, service } = makeSut()
     vi.spyOn(service, 'loadPaging').mockImplementationOnce(async () => {
-      return Promise.resolve(null as unknown as AnyDataModel[])
+      return Promise.resolve(null as unknown as {{pascalCase name}}Model[])
     })
-    const data = {} as LoadDataPagingController.Request
+    const data = {} as Load{{pascalCase name}}PagingController.Request
     const result = await sut.handle(data)
     expect(result.statusCode).toEqual(204)
   })
@@ -53,7 +53,7 @@ describe('Test Suite for load-data-paging-service.spec', () => {
     vi.spyOn(service, 'loadPaging').mockImplementationOnce(() =>
       throwError(new MissingParamsError('Error')),
     )
-    const data = {} as LoadDataPagingController.Request
+    const data = {} as Load{{pascalCase name}}PagingController.Request
     const result = await sut.handle(data)
     expect(result.statusCode).toEqual(400)
   })
@@ -61,7 +61,7 @@ describe('Test Suite for load-data-paging-service.spec', () => {
   test('Ensure that controller to return http response equals to 500 on Unknown error', async () => {
     const { sut, service } = makeSut()
     vi.spyOn(service, 'loadPaging').mockImplementationOnce(() => throwError())
-    const data = {} as LoadDataPagingController.Request
+    const data = {} as Load{{pascalCase name}}PagingController.Request
     const result = await sut.handle(data)
     expect(result.statusCode).toEqual(500)
   })

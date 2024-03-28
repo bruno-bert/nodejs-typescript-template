@@ -1,9 +1,9 @@
-import { AnyDataModel } from '@usecases'
+import { {{pascalCase name}}Model } from '@usecases'
 
-export interface LoadDataPagingProtocol {
-  loadPaging: () => Promise<LoadDataPagingProtocol.Result>
+export interface Load{{pascalCase name}}PagingProtocol {
+  loadPaging: () => Promise<Load{{pascalCase name}}PagingProtocol.Result>
 }
 
-export namespace LoadDataPagingProtocol {
-  export type Result = AnyDataModel[]
+export namespace Load{{pascalCase name}}PagingProtocol {
+  export type Result = {{pascalCase name}}Model[]
 }

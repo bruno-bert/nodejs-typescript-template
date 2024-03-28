@@ -1,13 +1,13 @@
-export class LoadDataError extends Error {
+export class Load{{pascalCase name}}Error extends Error {
   constructor(error: string) {
-    super(`Error on loading data: ${error}`)
-    this.name = 'LoadDataError'
+    super(`Error on loading {{kebabCase name}}: ${error}`)
+    this.name = 'Load{{pascalCase name}}Error'
   }
 }
 
-export class DatabaseLoadDataError extends Error {
+export class DatabaseLoad{{pascalCase name}}Error extends Error {
   constructor(error: string) {
-    super(`Error on loading data in database: ${error}`)
-    this.name = 'DatabaseLoadDataError'
+    super(`Error on loading {{kebabCase name}} in database: ${error}`)
+    this.name = 'DatabaseLoad{{pascalCase name}}Error'
   }
 }

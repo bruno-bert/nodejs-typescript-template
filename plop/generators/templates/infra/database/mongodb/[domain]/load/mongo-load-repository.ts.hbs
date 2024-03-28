@@ -1,0 +1,23 @@
+import { Load{{pascalCase name}}RepositoryProtocol } from '@usecases'
+import { MongoHelper, QueryBuilder } from '../../utils'
+import { DatabaseLoad{{pascalCase name}}Error } from '@usecases/{{kebabCase name}}/load-{{kebabCase name}}/errors'
+
+export class Load{{pascalCase name}}MongoRepository implements Load{{pascalCase name}}RepositoryProtocol {
+  private COLLECTION: string = '{{kebabCase name}}'
+
+  async loadAll(): Promise<Load{{pascalCase name}}RepositoryProtocol.Result> {
+    try {
+      const  {{pascalCase name}}Collection = await MongoHelper.getCollection(this.COLLECTION)
+      const query = new QueryBuilder()
+        .project({
+          _id: 1,
+          {{listForMongoQuery fields}}
+        })
+        .build()
+      const documents = await {{pascalCase name}}Collection.aggregate(query).toArray()
+      return MongoHelper.mapCollection(documents)
+    } catch (error) {
+      throw new DatabaseLoad{{pascalCase name}}Error(error as string)
+    }
+  }
+}

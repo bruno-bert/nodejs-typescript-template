@@ -1,0 +1,11 @@
+export const schema = {
+  $schema: 'http://json-schema.org/draft-07/schema#',
+  type: 'object',
+  properties: {
+    id: {
+      type: 'string',
+    },
+  },
+  required: ['id'],
+  additionalProperties: false,
+}

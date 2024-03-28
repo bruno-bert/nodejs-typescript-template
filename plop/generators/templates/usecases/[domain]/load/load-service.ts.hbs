@@ -1,19 +1,19 @@
 import { ValidatorProtocol } from '@utils'
-import { LoadDataError } from './errors'
-import { LoadDataProtocol, LoadDataRepositoryProtocol } from './protocols'
+import { Load{{pascalCase name}}Error } from './errors'
+import { Load{{pascalCase name}}Protocol, Load{{pascalCase name}}RepositoryProtocol } from './protocols'
 
-export class DbLoadData implements LoadDataProtocol {
+export class DbLoad{{pascalCase name}} implements Load{{pascalCase name}}Protocol {
   constructor(
-    private readonly loadDataRepository: LoadDataRepositoryProtocol,
-    private readonly loadDataValidator: ValidatorProtocol<any>,
+    private readonly Load{{pascalCase name}}Repository: Load{{pascalCase name}}RepositoryProtocol,
+    private readonly Load{{pascalCase name}}Validator: ValidatorProtocol<any>,
   ) {}
 
-  async load(): Promise<LoadDataProtocol.Result> {
+  async load(): Promise<Load{{pascalCase name}}Protocol.Result> {
     try {
-      // this.loadDataValidator.validate(null, {})
-      return await this.loadDataRepository.loadAll()
+      // this.Load{{pascalCase name}}Validator.validate(null, {})
+      return await this.Load{{pascalCase name}}Repository.loadAll()
     } catch (error) {
-      throw new LoadDataError(error as unknown as string)
+      throw new Load{{pascalCase name}}Error(error as unknown as string)
     }
   }
 }

@@ -1,27 +1,27 @@
-export class EditDataError extends Error {
+export class Edit{{pascalCase name}}Error extends Error {
   constructor(error: string) {
-    super(`Error on editing data: ${error}`)
-    this.name = 'EditDataError'
+    super(`Error on editing {{kebabCase name}}: ${error}`)
+    this.name = 'Edit{{pascalCase name}}Error'
   }
 }
 
-export class EditDataNotFoundError extends EditDataError {
+export class Edit{{pascalCase name}}NotFoundError extends Edit{{pascalCase name}}Error {
   constructor(error: string) {
-    super(`Error on editing data: ${error}`)
-    this.name = 'EditDataError'
+    super(`Error on editing {{kebabCase name}}: ${error}`)
+    this.name = 'Edit{{pascalCase name}}Error'
   }
 }
 
-export class DatabaseEditDataError extends EditDataError {
+export class DatabaseEdit{{pascalCase name}}Error extends Edit{{pascalCase name}}Error {
   constructor(error: string) {
-    super(`Error on editing data in database: ${error}`)
-    this.name = 'DatabaseEditDataError'
+    super(`Error on editing {{kebabCase name}} in database: ${error}`)
+    this.name = 'DatabaseEdit{{pascalCase name}}Error'
   }
 }
 
-export class DatabaseEditDataNotFoundError extends EditDataNotFoundError {
+export class DatabaseEdit{{pascalCase name}}NotFoundError extends Edit{{pascalCase name}}NotFoundError {
   constructor(error: string) {
-    super(`Error on editing data in database: ${error}`)
-    this.name = 'DatabaseEditDataError'
+    super(`Error on editing {{kebabCase name}} in database: ${error}`)
+    this.name = 'DatabaseEdit{{pascalCase name}}Error'
   }
 }

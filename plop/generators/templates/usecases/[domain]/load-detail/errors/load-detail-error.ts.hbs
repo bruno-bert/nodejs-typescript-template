@@ -1,27 +1,27 @@
-export class LoadDataDetailError extends Error {
+export class Load{{pascalCase name}}DetailError extends Error {
   constructor(error: string) {
-    super(`Error on loading data detail: ${error}`)
-    this.name = 'LoadDataDetailError'
+    super(`Error on loading {{kebabCase name}} detail: ${error}`)
+    this.name = 'Load{{pascalCase name}}DetailError'
   }
 }
 
-export class LoadDataDetailNotFoundError extends Error {
+export class Load{{pascalCase name}}DetailNotFoundError extends Error {
   constructor(error: string) {
-    super(`Error on loading data detail: ${error}`)
-    this.name = 'LoadDataDetailNotFoundError'
+    super(`Error on loading {{kebabCase name}} detail: ${error}`)
+    this.name = 'Load{{pascalCase name}}DetailNotFoundError'
   }
 }
 
-export class DatabaseLoadDataDetailError extends LoadDataDetailError {
+export class DatabaseLoad{{pascalCase name}}DetailError extends Load{{pascalCase name}}DetailError {
   constructor(error: string) {
-    super(`Error on loading data detail in database: ${error}`)
-    this.name = 'DatabaseLoadDataDetailError'
+    super(`Error on loading {{kebabCase name}} detail in database: ${error}`)
+    this.name = 'DatabaseLoad{{pascalCase name}}DetailError'
   }
 }
 
-export class DatabaseLoadDataDetailNotFoundError extends LoadDataDetailNotFoundError {
+export class DatabaseLoad{{pascalCase name}}DetailNotFoundError extends Load{{pascalCase name}}DetailNotFoundError {
   constructor(error: string) {
-    super(`Error on loading data detail in database: ${error}`)
-    this.name = 'DatabaseLoadDataDetailNotFoundError'
+    super(`Error on loading {{kebabCase name}} detail in database: ${error}`)
+    this.name = 'DatabaseLoad{{pascalCase name}}DetailNotFoundError'
   }
 }

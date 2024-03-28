@@ -1,0 +1,42 @@
+import { MongoHelper } from '../../utils'
+import {
+  DatabaseInvalidIdError,
+  Load{{pascalCase name}}DetailRepositoryProtocol,
+} from '@usecases'
+import {
+  DatabaseLoad{{pascalCase name}}DetailError,
+  DatabaseLoad{{pascalCase name}}DetailNotFoundError,
+} from '@usecases/{{kebabCase name}}/load-{{kebabCase name}}-detail/errors'
+
+import { ObjectId } from 'mongodb'
+
+export class Load{{pascalCase name}}DetailMongoRepository
+  implements Load{{pascalCase name}}DetailRepositoryProtocol
+{
+  private COLLECTION: string = '{{kebabCase name}}'
+
+  async loadById(id: string): Promise<Load{{pascalCase name}}DetailRepositoryProtocol.Result> {
+    try {
+      let objectId
+
+      try {
+        objectId = new ObjectId(id)
+      } catch (error) {
+        throw new DatabaseInvalidIdError(error as string)
+      }
+
+      const detailCollection = await MongoHelper.getCollection(this.COLLECTION)
+      const detail = await detailCollection.findOne({
+        _id: objectId,
+      })
+
+      if (!detail) throw new DatabaseLoad{{pascalCase name}}DetailNotFoundError('id: ' + id)
+
+      return detail && MongoHelper.map(detail)
+    } catch (error) {
+      if (error instanceof DatabaseLoad{{pascalCase name}}DetailNotFoundError) throw error
+      if (error instanceof DatabaseInvalidIdError) throw error
+      throw new DatabaseLoad{{pascalCase name}}DetailError(error as string)
+    }
+  }
+}

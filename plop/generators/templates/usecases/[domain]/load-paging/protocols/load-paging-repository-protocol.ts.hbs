@@ -1,10 +1,10 @@
-import { AnyDataModel } from '@usecases'
+import { {{pascalCase name}}Model } from '@usecases'
 
-export interface LoadDataPagingRepositoryProtocol {
-  loadPaging: () => Promise<LoadDataPagingRepositoryProtocol.Result>
+export interface Load{{pascalCase name}}PagingRepositoryProtocol {
+  loadPaging: () => Promise<Load{{pascalCase name}}PagingRepositoryProtocol.Result>
 }
 
-export namespace LoadDataPagingRepositoryProtocol {
+export namespace Load{{pascalCase name}}PagingRepositoryProtocol {
   export type Params = any
-  export type Result = AnyDataModel[]
+  export type Result = {{pascalCase name}}Model[]
 }

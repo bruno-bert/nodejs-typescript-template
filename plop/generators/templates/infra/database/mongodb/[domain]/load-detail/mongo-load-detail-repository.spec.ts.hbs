@@ -1,0 +1,33 @@
+import { describe, expect, test, afterAll, beforeEach } from 'vitest'
+import { Load{{pascalCase name}}DetailMongoRepository } from './mongo-load-{{kebabCase name}}-detail-repository'
+import { MongoHelper } from '../../utils'
+import { Collection } from 'mongodb'
+import { mockCreateDataParams } from '@test-mocks'
+
+const makeSut = () => {
+  return {
+    sut: new Load{{pascalCase name}}DetailMongoRepository(),
+  }
+}
+
+let {{pascalCase name}}Collection: Collection
+
+afterAll(async () => {
+  await MongoHelper.disconnect()
+})
+
+beforeEach(async () => {
+  await MongoHelper.connect((globalThis as any).__MONGO_URI__)
+  {{pascalCase name}}Collection = await MongoHelper.getCollection('{{kebabCase name}}')
+  await {{pascalCase name}}Collection.deleteMany({})
+})
+
+describe('Test Suite for mongo-load-{{kebabCase name}}-detail-repository.spec', () => {
+  test('Ensure that load {{kebabCase name}} detail will return required id', async () => {
+    const document = await {{pascalCase name}}Collection.insertOne(mockCreateDataParams())
+    const { sut } = makeSut()
+    const id = String(document.insertedId)
+    const result = await sut.loadById(id)
+    expect(result.id).toEqual(document.insertedId)
+  })
+})

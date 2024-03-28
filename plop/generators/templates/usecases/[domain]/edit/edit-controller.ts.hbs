@@ -1,50 +1,42 @@
 import { Controller, HttpResponse } from '@presentation/protocols'
 import { noContent, ok, notFound } from '@presentation/helpers'
-import { EditDataProtocol } from './protocols'
-import { EditDataModel } from '@usecases'
-import { EditDataNotFoundError } from './errors'
+import { Edit{{pascalCase name}}Protocol } from './protocols'
+import { Edit{{pascalCase name}}Model } from '@usecases'
+import { Edit{{pascalCase name}}NotFoundError } from './errors'
 import { errorToHttpResponse } from '@utils/error-handler'
 
-export class EditDataController implements Controller {
-  constructor(private readonly editData: EditDataProtocol) {}
+export class Edit{{pascalCase name}}Controller implements Controller {
+  constructor(private readonly Edit{{pascalCase name}}: Edit{{pascalCase name}}Protocol) {}
 
   async map({
     id,
-    name,
-    welcomeMessage,
-    date,
-  }: EditDataController.Request): Promise<EditDataModel.Params> {
-    return { id, name, welcomeMessage, date }
+   {{listFieldNames fields}}
+  }: Edit{{pascalCase name}}Controller.Request): Promise<Edit{{pascalCase name}}Model.Params> {
+    return { id, {{listFieldNames fields}} }
   }
 
   async handle({
     id,
-    name,
-    welcomeMessage,
-    date,
-  }: EditDataController.Request): Promise<HttpResponse> {
+   {{listFieldNames fields}}
+  }: Edit{{pascalCase name}}Controller.Request): Promise<HttpResponse> {
     try {
       const params = await this.map({
         id,
-        name,
-        welcomeMessage,
-        date,
+      {{listFieldNames fields}}
       })
 
-      const data = await this.editData.edit(id, params)
+      const data = await this.Edit{{pascalCase name}}.edit(id, params)
       return data ? ok(data) : noContent()
     } catch (error: any) {
-      if (error instanceof EditDataNotFoundError) return notFound()
+      if (error instanceof Edit{{pascalCase name}}NotFoundError) return notFound()
       return errorToHttpResponse(error)
     }
   }
 }
 
-export namespace EditDataController {
+export namespace Edit{{pascalCase name}}Controller {
   export type Request = {
     id: string
-    name: string
-    welcomeMessage: string
-    date: Date
+    {{listFieldsTypescript fields}}
   }
 }

@@ -1,17 +1,17 @@
-import { DeleteDataModel } from '@usecases'
-import { DeleteDataProtocol, DeleteDataRepositoryProtocol } from './protocols'
+import { Delete{{pascalCase name}}Model } from '@usecases'
+import { Delete{{pascalCase name}}Protocol, Delete{{pascalCase name}}RepositoryProtocol } from './protocols'
 import { ValidatorProtocol } from '@utils'
-import { schema } from './delete-data-service-schema'
+import { schema } from './delete-{{kebabCase name}}-service-schema'
 
-export class DbDeleteData implements DeleteDataProtocol {
+export class DbDelete{{pascalCase name}} implements Delete{{pascalCase name}}Protocol {
   constructor(
-    private readonly deleteDataRepository: DeleteDataRepositoryProtocol,
-    private readonly deleteDataValidator: ValidatorProtocol<DeleteDataRepositoryProtocol.Params>,
+    private readonly Delete{{pascalCase name}}Repository: Delete{{pascalCase name}}RepositoryProtocol,
+    private readonly Delete{{pascalCase name}}Validator: ValidatorProtocol<Delete{{pascalCase name}}RepositoryProtocol.Params>,
   ) {}
 
   async map({
     id,
-  }: DeleteDataModel.Params): Promise<DeleteDataRepositoryProtocol.Params> {
+  }: Delete{{pascalCase name}}Model.Params): Promise<Delete{{pascalCase name}}RepositoryProtocol.Params> {
     return {
       id,
     }
@@ -19,13 +19,13 @@ export class DbDeleteData implements DeleteDataProtocol {
 
   async delete({
     id,
-  }: DeleteDataModel.Params): Promise<DeleteDataProtocol.Result> {
+  }: Delete{{pascalCase name}}Model.Params): Promise<Delete{{pascalCase name}}Protocol.Result> {
     const params = await this.map({
       id,
     })
 
-    this.deleteDataValidator.validate(schema, { id })
+    this.Delete{{pascalCase name}}Validator.validate(schema, { id })
 
-    return await this.deleteDataRepository.delete(params)
+    return await this.Delete{{pascalCase name}}Repository.delete(params)
   }
 }

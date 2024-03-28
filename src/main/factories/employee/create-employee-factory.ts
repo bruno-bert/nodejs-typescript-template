@@ -1,7 +1,8 @@
 import { Controller } from '@presentation/protocols'
 
-import { CreateEmployeeMongoRepository } from '@infra'
-// import { CreateEmployeePrismaRepository } from '@infra'
+import { CreateEmployeeMongoRepository } from '@infra/database/mongodb/employee'
+
+// import { CreateEmployeePrismaRepository } from '@infra/database/prisma/employee'
 
 import {
   DbCreateEmployee,
@@ -11,7 +12,7 @@ import {
 } from '@usecases'
 import { AbstractFactory } from '../abstract-factory'
 
-export class CreateEmployeeFactory extends AbstractFactory<CreateRepositoryProtocol> {
+export class CreateEmployeeFactory extends AbstractFactory<CreateEmployeeRepositoryProtocol> {
   // makePrismaRepository = (): CreateEmployeeRepositoryProtocol => {
   //   const repository = new CreateEmployeePrismaRepository()
   //   return repository

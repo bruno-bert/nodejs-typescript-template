@@ -5,7 +5,7 @@ import {
   mockCreate{{pascalCase name}}Params,
   throwError,
 } from '@test-mocks'
-import { DbCreate{{pascalCase name}} } from './create-data-service'
+import { DbCreate{{pascalCase name}} } from './create-{{kebabCase name}}-service'
 import { Create{{pascalCase name}}Error } from './errors'
 import { {{pascalCase name}}Model, Create{{pascalCase name}}RepositoryProtocol } from '@usecases'
 
@@ -25,7 +25,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('Test Suite for create-{{kebalCase name}}-service.spec', () => {
+describe('Test Suite for create-{{kebabCase name}}-service.spec', () => {
   test('Ensure that create in repository is called once and with same parameters', async () => {
     const { sut, repository } = makeSut()
     const spy = vi

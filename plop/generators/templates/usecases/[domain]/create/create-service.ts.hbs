@@ -10,14 +10,10 @@ export class DbCreate{{pascalCase name}} implements Create{{pascalCase name}}Pro
   ) {}
 
   async map({
-    name,
-    welcomeMessage,
-    date,
+    {{listFieldNames fields}}
   }: Create{{pascalCase name}}Model.Params): Promise<Create{{pascalCase name}}RepositoryProtocol.Params> {
     return {
-      name,
-      welcomeMessage,
-      date,
+     {{listFieldNames fields}}
     }
   }
 
@@ -26,22 +22,16 @@ export class DbCreate{{pascalCase name}} implements Create{{pascalCase name}}Pro
   }
 
   async create({
-    name,
-    welcomeMessage,
-    date,
+     {{listFieldNames fields}}
   }: Create{{pascalCase name}}Model.Params): Promise<Create{{pascalCase name}}Protocol.Result> {
     const validate = await this.Create{{pascalCase name}}Valitator.validate(schema, {
-      name,
-      welcomeMessage,
-      date,
+      {{listFieldNames fields}}
     })
 
     if (!validate.success) this.handleValidationErrors(validate)
 
     const params = await this.map({
-      name,
-      welcomeMessage,
-      date,
+     {{listFieldNames fields}}
     })
 
     return this.Create{{pascalCase name}}Repository.create(params)

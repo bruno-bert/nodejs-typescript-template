@@ -1,35 +1,35 @@
 import { Controller, HttpResponse } from '@presentation/protocols'
 import { noContent, ok, notFound } from '@presentation/helpers'
-import { DeleteDataProtocol } from './protocols'
-import { DeleteDataModel } from '@usecases'
-import { DeleteDataNotFoundError } from './errors'
+import { Delete{{pascalCase name}}Protocol } from './protocols'
+import { Delete{{pascalCase name}}Model } from '@usecases'
+import { Delete{{pascalCase name}}NotFoundError } from './errors'
 import { errorToHttpResponse } from '@utils/error-handler'
 
-export class DeleteDataController implements Controller {
-  constructor(private readonly deleteData: DeleteDataProtocol) {}
+export class Delete{{pascalCase name}}Controller implements Controller {
+  constructor(private readonly Delete{{pascalCase name}}: Delete{{pascalCase name}}Protocol) {}
 
   async map({
     id,
-  }: DeleteDataController.Request): Promise<DeleteDataModel.Params> {
+  }: Delete{{pascalCase name}}Controller.Request): Promise<Delete{{pascalCase name}}Model.Params> {
     return { id }
   }
 
-  async handle(request: DeleteDataController.Request): Promise<HttpResponse> {
+  async handle(request: Delete{{pascalCase name}}Controller.Request): Promise<HttpResponse> {
     try {
       const id = request.id
       const params = await this.map({
         id,
       })
-      const data = await this.deleteData.delete(params)
+      const data = await this.Delete{{pascalCase name}}.delete(params)
       return data ? ok(data) : noContent()
     } catch (error: any) {
-      if (error instanceof DeleteDataNotFoundError) return notFound()
+      if (error instanceof Delete{{pascalCase name}}NotFoundError) return notFound()
       return errorToHttpResponse(error)
     }
   }
 }
 
-export namespace DeleteDataController {
+export namespace Delete{{pascalCase name}}Controller {
   export type Request = {
     id: string
   }

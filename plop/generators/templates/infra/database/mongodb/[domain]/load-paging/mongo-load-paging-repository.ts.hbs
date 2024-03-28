@@ -1,0 +1,27 @@
+import { Load{{pascalCase name}}PagingRepositoryProtocol } from '@usecases'
+import { MongoHelper, QueryBuilder } from '../../utils'
+import { DatabaseLoad{{pascalCase name}}PagingError } from '@usecases/{{kebabCase name}}/load-{{kebabCase name}}-paging/errors'
+
+export class Load{{pascalCase name}}PagingMongoRepository
+  implements Load{{pascalCase name}}PagingRepositoryProtocol
+{
+  private COLLECTION: string = '{{kebabCase name}}'
+
+  async loadPaging(): Promise<Load{{pascalCase name}}PagingRepositoryProtocol.Result> {
+    try {
+      const {{pascalCase name}}Collection = await MongoHelper.getCollection(this.COLLECTION)
+      const query = new QueryBuilder()
+        .project({
+          _id: 1,
+          welcomeMessage: 1,
+          name: 1,
+          date: 1,
+        })
+        .build()
+      const documents = await {{pascalCase name}}Collection.aggregate(query).toArray()
+      return MongoHelper.mapCollection(documents)
+    } catch (error) {
+      throw new DatabaseLoad{{pascalCase name}}PagingError(error as string)
+    }
+  }
+}

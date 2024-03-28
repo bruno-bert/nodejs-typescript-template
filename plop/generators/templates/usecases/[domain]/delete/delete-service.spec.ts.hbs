@@ -1,22 +1,22 @@
 import { describe, expect, test, vi } from 'vitest'
 import {
   DataValidatorSpy,
-  DeleteDataRepositorySpy,
+  Delete{{pascalCase name}}RepositorySpy,
   throwError,
 } from '@test-mocks'
-import { DbDeleteData } from './delete-data-service'
-import { DeleteDataError } from './errors'
-import { DeleteDataRepositoryProtocol } from '@usecases'
+import { DbDelete{{pascalCase name}} } from './delete-{{kebabCase name}}-service'
+import { Delete{{pascalCase name}}Error } from './errors'
+import { Delete{{pascalCase name}}RepositoryProtocol } from '@usecases'
 
 type SutTypes = {
-  sut: DbDeleteData
-  repository: DeleteDataRepositorySpy
-  validator: DataValidatorSpy<DeleteDataRepositoryProtocol.Params>
+  sut: DbDelete{{pascalCase name}}
+  repository: Delete{{pascalCase name}}RepositorySpy
+  validator: DataValidatorSpy<Delete{{pascalCase name}}RepositoryProtocol.Params>
 }
 const makeSut = (): SutTypes => {
-  const repository = new DeleteDataRepositorySpy()
+  const repository = new Delete{{pascalCase name}}RepositorySpy()
   const validator = new DataValidatorSpy()
-  const sut = new DbDeleteData(repository, validator)
+  const sut = new DbDelete{{pascalCase name}}(repository, validator)
   return {
     sut,
     repository,
@@ -24,13 +24,13 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('Test Suite for delete-data-service.spec', () => {
+describe('Test Suite for delete-{{kebabCase name}}-service.spec', () => {
   test('Ensure that delete in repository is called once and with same parameters', async () => {
     const { sut, repository } = makeSut()
     const spy = vi
       .spyOn(repository, 'delete')
       .mockImplementation(() =>
-        Promise.resolve({} as DeleteDataRepositoryProtocol.Result),
+        Promise.resolve({} as Delete{{pascalCase name}}RepositoryProtocol.Result),
       )
     const id = '1'
     await sut.delete({ id })
@@ -47,14 +47,14 @@ describe('Test Suite for delete-data-service.spec', () => {
     expect(spy).toHaveBeenCalledOnce()
   })
 
-  test('Ensure that delete data service to throw a Custom DeleteDataError when repository throws', async () => {
+  test('Ensure that delete {{kebabCase name}} service to throw a Custom Delete{{pascalCase name}}Error when repository throws', async () => {
     const { sut, repository } = makeSut()
     vi.spyOn(repository, 'delete').mockImplementationOnce(() =>
-      throwError(new DeleteDataError('Error')),
+      throwError(new Delete{{pascalCase name}}Error('Error')),
     )
     const id = '1'
     const promise = sut.delete({ id })
-    await expect(promise).rejects.toThrowError(DeleteDataError)
+    await expect(promise).rejects.toThrowError(Delete{{pascalCase name}}Error)
   })
 
   test('Ensure that delete service returns exactly what the repository returns', async () => {

@@ -1,18 +1,18 @@
 import { ValidatorProtocol } from '@utils'
 import {
-  LoadDataDetailProtocol,
-  LoadDataDetailRepositoryProtocol,
+  Load{{pascalCase name}}DetailProtocol,
+  Load{{pascalCase name}}DetailRepositoryProtocol,
 } from './protocols'
-import { schema } from './load-data-detail-service-schema'
+import { schema } from './load-{{kebabCase name}}-detail-service-schema'
 
-export class DbLoadDataDetail implements LoadDataDetailProtocol {
+export class DbLoad{{pascalCase name}}Detail implements Load{{pascalCase name}}DetailProtocol {
   constructor(
-    private readonly loadDataDetailRepository: LoadDataDetailRepositoryProtocol,
-    private readonly loadDataDetailValidator: ValidatorProtocol<LoadDataDetailRepositoryProtocol.Params>,
+    private readonly Load{{pascalCase name}}DetailRepository: Load{{pascalCase name}}DetailRepositoryProtocol,
+    private readonly Load{{pascalCase name}}DetailValidator: ValidatorProtocol<Load{{pascalCase name}}DetailRepositoryProtocol.Params>,
   ) {}
 
-  async load(id: string): Promise<LoadDataDetailProtocol.Result> {
-    this.loadDataDetailValidator.validate(schema, { id })
-    return this.loadDataDetailRepository.loadById(id)
+  async load(id: string): Promise<Load{{pascalCase name}}DetailProtocol.Result> {
+    this.Load{{pascalCase name}}DetailValidator.validate(schema, { id })
+    return this.Load{{pascalCase name}}DetailRepository.loadById(id)
   }
 }

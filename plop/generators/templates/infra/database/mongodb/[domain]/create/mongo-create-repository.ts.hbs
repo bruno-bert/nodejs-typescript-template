@@ -1,0 +1,20 @@
+import { DatabaseCreate{{pascalCase name}}Error } from '@usecases/{{kebabCase name}}/create-{{kebabCase name}}/errors'
+import { MongoHelper } from '../../utils'
+import { Create{{pascalCase name}}RepositoryProtocol } from '@usecases'
+
+export class Create{{pascalCase name}}MongoRepository implements Create{{pascalCase name}}RepositoryProtocol {
+  private COLLECTION: string = '{{kebabCase name}}'
+
+  async create(
+    params: Create{{pascalCase name}}RepositoryProtocol.Params,
+  ): Promise<Create{{pascalCase name}}RepositoryProtocol.Result> {
+    try {
+      const {{pascalCase name}}Collection = await MongoHelper.getCollection(this.COLLECTION)
+      const document = await {{pascalCase name}}Collection.insertOne(params)
+      const result = { id: document.insertedId.toString(), ...params }
+      return MongoHelper.map(result)
+    } catch (error) {
+      throw new DatabaseCreate{{pascalCase name}}Error(error as string)
+    }
+  }
+}

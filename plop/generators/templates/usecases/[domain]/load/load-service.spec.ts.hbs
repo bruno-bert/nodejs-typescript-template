@@ -1,21 +1,21 @@
 import { describe, expect, test, vi } from 'vitest'
 import {
   DataValidatorSpy,
-  LoadDataRepositorySpy,
+  Load{{pascalCase name}}RepositorySpy,
   throwError,
 } from '@test-mocks'
-import { DbLoadData } from './load-data-service'
-import { LoadDataError } from './errors'
+import { DbLoad{{pascalCase name}} } from './load-{{kebabCase name}}-service'
+import { Load{{pascalCase name}}Error } from './errors'
 
 type SutTypes = {
-  sut: DbLoadData
-  repository: LoadDataRepositorySpy
+  sut: DbLoad{{pascalCase name}}
+  repository: Load{{pascalCase name}}RepositorySpy
   validator: DataValidatorSpy<any>
 }
 const makeSut = (): SutTypes => {
-  const repository = new LoadDataRepositorySpy()
+  const repository = new Load{{pascalCase name}}RepositorySpy()
   const validator = new DataValidatorSpy()
-  const sut = new DbLoadData(repository, validator)
+  const sut = new DbLoad{{pascalCase name}}(repository, validator)
   return {
     sut,
     repository,
@@ -23,7 +23,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('Test Suite for load-data-service.spec', () => {
+describe('Test Suite for load-{{kebabCase name}}-service.spec', () => {
   test('Ensure that loadAll in repository is called once', async () => {
     const { sut, repository } = makeSut()
     const spy = vi
@@ -33,16 +33,16 @@ describe('Test Suite for load-data-service.spec', () => {
     expect(spy).toHaveBeenCalledOnce()
   })
 
-  test('Ensure that load data service to throw a Custom LoadDataError when repository throws', async () => {
+  test('Ensure that load {{kebabCase name}} service to throw a Custom Load{{pascalCase name}}Error when repository throws', async () => {
     const { sut, repository } = makeSut()
     vi.spyOn(repository, 'loadAll').mockImplementationOnce(() =>
-      throwError(new LoadDataError('Error')),
+      throwError(new Load{{pascalCase name}}Error('Error')),
     )
     const promise = sut.load()
-    await expect(promise).rejects.toThrowError(LoadDataError)
+    await expect(promise).rejects.toThrowError(Load{{pascalCase name}}Error)
   })
 
-  test('Ensure that load data service returns exaclty what the repository returns', async () => {
+  test('Ensure that load {{kebabCase name}} service returns exaclty what the repository returns', async () => {
     const { sut, repository } = makeSut()
     const result = await sut.load()
     expect(result).toEqual(repository.result)

@@ -1,7 +1,7 @@
 import { Controller } from '@presentation/protocols'
 
-import { DeleteEmployeeMongoRepository } from '@infra'
-// import { DeleteEmployeePrismaRepository } from '@infra'
+import { DeleteEmployeeMongoRepository } from '@infra/database/mongodb/employee'
+// import { DeleteEmployeePrismaRepository }  from '@infra/database/prisma/employee'
 
 import {
   DbDeleteEmployee,

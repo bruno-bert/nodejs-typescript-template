@@ -1,23 +1,23 @@
 import { describe, expect, test, vi } from 'vitest'
 import {
   DataValidatorSpy,
-  EditDataRepositorySpy,
-  mockEditDataParams,
+  Edit{{pascalCase name}}RepositorySpy,
+  mockEdit{{pascalCase name}}Params,
   throwError,
 } from '@test-mocks'
-import { DbEditData } from './edit-data-service'
-import { EditDataError } from './errors'
-import { AnyDataModel, EditDataRepositoryProtocol } from '@usecases'
+import { DbEdit{{pascalCase name}} } from './edit-{{kebabCase name}}-service'
+import { Edit{{pascalCase name}}Error } from './errors'
+import { {{pascalCase name}}Model, Edit{{pascalCase name}}RepositoryProtocol } from '@usecases'
 
 type SutTypes = {
-  sut: DbEditData
-  repository: EditDataRepositorySpy
-  validator: DataValidatorSpy<EditDataRepositoryProtocol.Params>
+  sut: DbEdit{{pascalCase name}}
+  repository: Edit{{pascalCase name}}RepositorySpy
+  validator: DataValidatorSpy<Edit{{pascalCase name}}RepositoryProtocol.Params>
 }
 const makeSut = (): SutTypes => {
-  const repository = new EditDataRepositorySpy()
+  const repository = new Edit{{pascalCase name}}RepositorySpy()
   const validator = new DataValidatorSpy()
-  const sut = new DbEditData(repository, validator)
+  const sut = new DbEdit{{pascalCase name}}(repository, validator)
 
   return {
     sut,
@@ -26,14 +26,14 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('Test Suite for edit-data-service.spec', () => {
+describe('Test Suite for edit-{{kebabCase name}}-service.spec', () => {
   test('Ensure that edit in repository is called once and with same parameters', async () => {
     const { sut, repository } = makeSut()
     const spy = vi
       .spyOn(repository, 'edit')
-      .mockImplementation(() => Promise.resolve({} as AnyDataModel))
+      .mockImplementation(() => Promise.resolve({} as {{pascalCase name}}Model))
     const id = '1'
-    const data = mockEditDataParams(id)
+    const data = mockEdit{{pascalCase name}}Params(id)
     await sut.edit(id, data)
     expect(spy).toHaveBeenCalledOnce()
     expect(spy).toHaveBeenCalledWith(id, data)
@@ -45,26 +45,26 @@ describe('Test Suite for edit-data-service.spec', () => {
       .spyOn(validator, 'validate')
       .mockImplementation(() => Promise.resolve({ success: true } as any))
     const id = '1'
-    const data = mockEditDataParams(id)
+    const data = mockEdit{{pascalCase name}}Params(id)
     await sut.edit(id, data)
     expect(spy).toHaveBeenCalledOnce()
   })
 
-  test('Ensure that edit data service to throw a Custom EditDataError when repository throws', async () => {
+  test('Ensure that edit {{kebabCase name}} service to throw a Custom Edit{{pascalCase name}}Error when repository throws', async () => {
     const { sut, repository } = makeSut()
     vi.spyOn(repository, 'edit').mockImplementationOnce(() =>
-      throwError(new EditDataError('Error')),
+      throwError(new Edit{{pascalCase name}}Error('Error')),
     )
     const id = '1'
-    const data = mockEditDataParams(id)
+    const data = mockEdit{{pascalCase name}}Params(id)
     const promise = sut.edit(id, data)
-    await expect(promise).rejects.toThrowError(EditDataError)
+    await expect(promise).rejects.toThrowError(Edit{{pascalCase name}}Error)
   })
 
   test('Ensure that edit service returns exactly what the repository returns', async () => {
     const { sut, repository } = makeSut()
     const id = '1'
-    const data = mockEditDataParams(id)
+    const data = mockEdit{{pascalCase name}}Params(id)
     const result = await sut.edit(id, data)
     expect(result).toEqual(repository.result)
   })

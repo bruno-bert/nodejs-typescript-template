@@ -1,0 +1,49 @@
+import { describe, expect, test, vi } from 'vitest'
+import {
+  DataValidatorSpy,
+  Load{{pascalCase name}}PagingRepositorySpy,
+  throwError,
+} from '@test-mocks'
+import { DbLoad{{pascalCase name}}Paging } from './load-{{kebabCase name}}-paging-service'
+import { Load{{pascalCase name}}PagingError } from './errors'
+import { Load{{pascalCase name}}PagingRepositoryProtocol } from './protocols'
+
+type SutTypes = {
+  sut: DbLoad{{pascalCase name}}Paging
+  repository: Load{{pascalCase name}}PagingRepositorySpy
+  validator: DataValidatorSpy<Load{{pascalCase name}}PagingRepositoryProtocol.Params>
+}
+const makeSut = (): SutTypes => {
+  const repository = new Load{{pascalCase name}}PagingRepositorySpy()
+  const validator = new DataValidatorSpy()
+  const sut = new DbLoad{{pascalCase name}}Paging(repository, validator)
+  return {
+    sut,
+    repository,
+    validator,
+  }
+}
+
+describe('Test Suite for load-{{kebabCase name}}-paging-service.spec', () => {
+  test('Ensure that loadPaging in repository is called once', async () => {
+    const { sut, repository } = makeSut()
+    const spy = vi
+      .spyOn(repository, 'loadPaging')
+      .mockImplementation(() => Promise.resolve([]))
+    await sut.loadPaging()
+    expect(spy).toHaveBeenCalledOnce()
+  })
+
+  test('Ensure that load {{kebabCase name}} paging service to throw a Custom Load{{pascalCase name}}PagingError when repository throws', async () => {
+    const { sut, repository } = makeSut()
+    vi.spyOn(repository, 'loadPaging').mockImplementationOnce(throwError)
+    const promise = sut.loadPaging()
+    await expect(promise).rejects.toThrowError(Load{{pascalCase name}}PagingError)
+  })
+
+  test('Ensure that load {{kebabCase name}} paging service returns exactly what the repository returns', async () => {
+    const { sut, repository } = makeSut()
+    const result = await sut.loadPaging()
+    expect(result).toEqual(repository.result)
+  })
+})

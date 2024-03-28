@@ -1,28 +1,28 @@
 import { describe, expect, test, vi } from 'vitest'
-import { EditDataSpy, mockEditDataParams, throwError } from '@test-mocks'
+import { Edit{{pascalCase name}}Spy, mockEdit{{pascalCase name}}Params, throwError } from '@test-mocks'
 
-import { AnyDataModel, EditDataController, MissingParamsError } from '@usecases'
+import { {{pascalCase name}}Model, Edit{{pascalCase name}}Controller, MissingParamsError } from '@usecases'
 
 type SutTypes = {
-  sut: EditDataController
-  service: EditDataSpy
+  sut: Edit{{pascalCase name}}Controller
+  service: Edit{{pascalCase name}}Spy
 }
 const makeSut = (): SutTypes => {
-  const service = new EditDataSpy()
-  const sut = new EditDataController(service)
+  const service = new Edit{{pascalCase name}}Spy()
+  const sut = new Edit{{pascalCase name}}Controller(service)
   return {
     sut,
     service,
   }
 }
 
-describe('Test Suite for edit-data-service.spec', () => {
+describe('Test Suite for edit-{{kebabCase name}}-service.spec', () => {
   test('Ensure that edit in service is called once and with same parameters', async () => {
     const { sut, service } = makeSut()
     const spy = vi
       .spyOn(service, 'edit')
-      .mockImplementation(() => Promise.resolve({} as AnyDataModel))
-    const data = mockEditDataParams('1')
+      .mockImplementation(() => Promise.resolve({} as {{pascalCase name}}Model))
+    const data = mockEdit{{pascalCase name}}Params('1')
     await sut.handle(data)
     expect(spy).toHaveBeenCalledOnce()
     expect(spy).toHaveBeenCalledWith('1', data)
@@ -30,7 +30,7 @@ describe('Test Suite for edit-data-service.spec', () => {
 
   test('Ensure that controller to return http response equals to 200 on success', async () => {
     const { sut } = makeSut()
-    const data = mockEditDataParams('1')
+    const data = mockEdit{{pascalCase name}}Params('1')
     const result = await sut.handle(data)
     expect(result.statusCode).toEqual(200)
   })
@@ -38,9 +38,9 @@ describe('Test Suite for edit-data-service.spec', () => {
   test('Ensure that controller to return http response 204 when there is no data', async () => {
     const { sut, service } = makeSut()
     vi.spyOn(service, 'edit').mockImplementationOnce(async () => {
-      return Promise.resolve(null as unknown as AnyDataModel)
+      return Promise.resolve(null as unknown as {{pascalCase name}}Model)
     })
-    const data = mockEditDataParams('1')
+    const data = mockEdit{{pascalCase name}}Params('1')
     const result = await sut.handle(data)
     expect(result.statusCode).toEqual(204)
   })
@@ -50,7 +50,7 @@ describe('Test Suite for edit-data-service.spec', () => {
     vi.spyOn(service, 'edit').mockImplementationOnce(() =>
       throwError(new MissingParamsError('Error')),
     )
-    const data = mockEditDataParams('1')
+    const data = mockEdit{{pascalCase name}}Params('1')
     const result = await sut.handle(data)
     expect(result.statusCode).toEqual(400)
   })
@@ -58,7 +58,7 @@ describe('Test Suite for edit-data-service.spec', () => {
   test('Ensure that controller to return http response equals to 500 on Unknown error', async () => {
     const { sut, service } = makeSut()
     vi.spyOn(service, 'edit').mockImplementationOnce(() => throwError())
-    const data = mockEditDataParams('1')
+    const data = mockEdit{{pascalCase name}}Params('1')
     const result = await sut.handle(data)
     expect(result.statusCode).toEqual(500)
   })

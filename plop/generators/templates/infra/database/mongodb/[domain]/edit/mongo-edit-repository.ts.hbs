@@ -1,0 +1,48 @@
+import { MongoHelper } from '../../utils'
+import { DatabaseInvalidIdError, Edit{{pascalCase name}}RepositoryProtocol } from '@usecases'
+import {
+  DatabaseEdit{{pascalCase name}}Error,
+  DatabaseEdit{{pascalCase name}}NotFoundError,
+} from '@usecases/{{kebabCase name}}/edit-{{kebabCase name}}/errors'
+import { ObjectId } from 'mongodb'
+
+export class Edit{{pascalCase name}}MongoRepository implements Edit{{pascalCase name}}RepositoryProtocol {
+  private COLLECTION: string = '{{kebabCase name}}'
+
+  async edit(
+    id: string,
+    params: Edit{{pascalCase name}}RepositoryProtocol.Params,
+  ): Promise<Edit{{pascalCase name}}RepositoryProtocol.Result> {
+    try {
+      let objectId
+      try {
+        objectId = new ObjectId(id)
+      } catch (error) {
+        throw new DatabaseInvalidIdError(error as string)
+      }
+
+      const {{pascalCase name}}Collection = await MongoHelper.getCollection(this.COLLECTION)
+      const query = {
+        _id: objectId,
+      }
+
+      const update = {
+        $set: params,
+      }
+
+      const result = await {{pascalCase name}}Collection.findOneAndUpdate(query, update, {
+        returnDocument: 'after',
+      })
+
+      if (result) {
+        return MongoHelper.map(result)
+      } else {
+        throw new DatabaseEdit{{pascalCase name}}NotFoundError('id: ' + id)
+      }
+    } catch (error) {
+      if (error instanceof DatabaseEdit{{pascalCase name}}NotFoundError) throw error
+      if (error instanceof DatabaseInvalidIdError) throw error
+      throw new DatabaseEdit{{pascalCase name}}Error(error as string)
+    }
+  }
+}

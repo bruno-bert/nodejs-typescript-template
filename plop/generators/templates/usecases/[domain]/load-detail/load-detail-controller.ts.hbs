@@ -1,27 +1,27 @@
 import { Controller, HttpResponse } from '@presentation/protocols'
 import { noContent, ok, notFound } from '@presentation/helpers'
-import { LoadDataDetailProtocol } from './protocols'
-import { LoadDataDetailNotFoundError } from './errors'
+import { Load{{pascalCase name}}DetailProtocol } from './protocols'
+import { Load{{pascalCase name}}DetailNotFoundError } from './errors'
 import { errorToHttpResponse } from '@utils/error-handler'
 
-export class LoadDataDetailController implements Controller {
-  constructor(private readonly loadDataDetail: LoadDataDetailProtocol) {}
+export class Load{{pascalCase name}}DetailController implements Controller {
+  constructor(private readonly Load{{pascalCase name}}Detail: Load{{pascalCase name}}DetailProtocol) {}
 
   async handle(
-    request: LoadDataDetailController.Request,
+    request: Load{{pascalCase name}}DetailController.Request,
   ): Promise<HttpResponse> {
     try {
       const id = request.id
-      const data = await this.loadDataDetail.load(id)
+      const data = await this.Load{{pascalCase name}}Detail.load(id)
       return data ? ok(data) : noContent()
     } catch (error: any) {
-      if (error instanceof LoadDataDetailNotFoundError) return notFound()
+      if (error instanceof Load{{pascalCase name}}DetailNotFoundError) return notFound()
       return errorToHttpResponse(error)
     }
   }
 }
 
-export namespace LoadDataDetailController {
+export namespace Load{{pascalCase name}}DetailController {
   export type Request = {
     id: string
   }

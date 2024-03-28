@@ -1,0 +1,38 @@
+import { describe, expect, test, afterAll, beforeEach } from 'vitest'
+import { Delete{{pascalCase name}}MongoRepository } from './mongo-delete-{{kebabCase name}}-repository'
+import { MongoHelper } from '../../utils'
+import { Collection } from 'mongodb'
+import { mockCreateDataParams } from '@test-mocks'
+
+const makeSut = () => {
+  return {
+    sut: new Delete{{pascalCase name}}MongoRepository(),
+  }
+}
+
+let {{pascalCase name}}Collection: Collection
+
+afterAll(async () => {
+  await MongoHelper.disconnect()
+})
+
+beforeEach(async () => {
+  await MongoHelper.connect((globalThis as any).__MONGO_URI__)
+  {{pascalCase name}}Collection = await MongoHelper.getCollection('{{kebabCase name}}')
+  await {{pascalCase name}}Collection.deleteMany({})
+})
+
+describe('Test Suite for mongo-delete-{{kebabCase name}}-repository.spec', () => {
+  test('Ensure that delete {{kebabCase name}} will return correct count of deleted record', async () => {
+    let item = mockCreateDataParams()
+    let document = await {{pascalCase name}}Collection.insertOne(item)
+    item = mockCreateDataParams()
+    document = await {{pascalCase name}}Collection.insertOne(item)
+
+    const { sut } = makeSut()
+    const id = String(document.insertedId)
+    const result = await sut.delete({ id })
+    expect(result.success).toEqual(true)
+    expect(result.count).toEqual(1)
+  })
+})

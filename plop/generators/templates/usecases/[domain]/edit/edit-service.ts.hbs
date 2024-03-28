@@ -1,46 +1,38 @@
-import { EditDataModel } from '@usecases'
-import { EditDataProtocol, EditDataRepositoryProtocol } from './protocols'
+import { Edit{{pascalCase name}}Model } from '@usecases'
+import { Edit{{pascalCase name}}Protocol, Edit{{pascalCase name}}RepositoryProtocol } from './protocols'
 import { ValidatorProtocol } from '@utils'
-import { schema } from './edit-data-service-schema'
+import { schema } from './edit-{{kebabCase name}}-service-schema'
 
-export class DbEditData implements EditDataProtocol {
+export class DbEdit{{pascalCase name}} implements Edit{{pascalCase name}}Protocol {
   constructor(
-    private readonly editDataRepository: EditDataRepositoryProtocol,
-    private readonly editDataValidator: ValidatorProtocol<EditDataRepositoryProtocol.Params>,
+    private readonly Edit{{pascalCase name}}Repository: Edit{{pascalCase name}}RepositoryProtocol,
+    private readonly Edit{{pascalCase name}}Validator: ValidatorProtocol<Edit{{pascalCase name}}RepositoryProtocol.Params>,
   ) {}
 
   async map({
     id,
-    name,
-    welcomeMessage,
-    date,
-  }: EditDataModel.Params): Promise<EditDataRepositoryProtocol.Params> {
+    {{listFieldNames fields}}
+  }: Edit{{pascalCase name}}Model.Params): Promise<Edit{{pascalCase name}}RepositoryProtocol.Params> {
     return {
       id,
-      name,
-      welcomeMessage,
-      date,
+      {{listFieldNames fields}}
     }
   }
 
   async edit(
     id: string,
-    { name, welcomeMessage, date }: EditDataModel.Params,
-  ): Promise<EditDataProtocol.Result> {
-    this.editDataValidator.validate(schema, {
+    {  {{listFieldNames fields}} }: Edit{{pascalCase name}}Model.Params,
+  ): Promise<Edit{{pascalCase name}}Protocol.Result> {
+    this.Edit{{pascalCase name}}Validator.validate(schema, {
       id,
-      name,
-      welcomeMessage,
-      date,
+       {{listFieldNames fields}}
     })
 
     const params = await this.map({
       id,
-      name,
-      welcomeMessage,
-      date,
+       {{listFieldNames fields}}
     })
 
-    return this.editDataRepository.edit(id, params)
+    return this.Edit{{pascalCase name}}Repository.edit(id, params)
   }
 }

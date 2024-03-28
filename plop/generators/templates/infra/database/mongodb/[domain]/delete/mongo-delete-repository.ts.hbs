@@ -1,0 +1,42 @@
+import { MongoHelper } from '../../utils'
+import { DatabaseInvalidIdError, Delete{{pascalCase name}}RepositoryProtocol } from '@usecases'
+import {
+  DatabaseDelete{{pascalCase name}}Error,
+  DatabaseDelete{{pascalCase name}}NotFoundError,
+} from '@usecases/{{kebabCase name}}/delete-{{kebabCase name}}/errors'
+
+import { ObjectId } from 'mongodb'
+
+export class Delete{{pascalCase name}}MongoRepository implements Delete{{pascalCase name}}RepositoryProtocol {
+  private COLLECTION: string = '{{kebabCase name}}'
+
+  async delete({
+    id,
+  }: Delete{{pascalCase name}}RepositoryProtocol.Params): Promise<Delete{{pascalCase name}}RepositoryProtocol.Result> {
+    try {
+      let objectId
+      try {
+        objectId = new ObjectId(id)
+      } catch (error) {
+        throw new DatabaseInvalidIdError(error as string)
+      }
+
+      const {{pascalCase name}}Collection = await MongoHelper.getCollection(this.COLLECTION)
+
+      const query = {
+        _id: objectId,
+      }
+
+      const result = await {{pascalCase name}}Collection.deleteOne(query)
+      if (result?.deletedCount) {
+        return { success: true, count: result?.deletedCount }
+      } else {
+        throw new DatabaseDelete{{pascalCase name}}NotFoundError('id: ' + id)
+      }
+    } catch (error) {
+      if (error instanceof DatabaseDelete{{pascalCase name}}NotFoundError) throw error
+      if (error instanceof DatabaseInvalidIdError) throw error
+      throw new DatabaseDelete{{pascalCase name}}Error(error as string)
+    }
+  }
+}

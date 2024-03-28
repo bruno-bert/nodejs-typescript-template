@@ -1,31 +1,31 @@
 import { describe, expect, test, vi } from 'vitest'
-import { LoadDataDetailSpy, throwError } from '@test-mocks'
+import { Load{{pascalCase name}}DetailSpy, throwError } from '@test-mocks'
 
 import {
-  AnyDataModel,
-  LoadDataDetailController,
+  {{pascalCase name}}Model,
+  Load{{pascalCase name}}DetailController,
   MissingParamsError,
 } from '@usecases'
 
 type SutTypes = {
-  sut: LoadDataDetailController
-  service: LoadDataDetailSpy
+  sut: Load{{pascalCase name}}DetailController
+  service: Load{{pascalCase name}}DetailSpy
 }
 const makeSut = (): SutTypes => {
-  const service = new LoadDataDetailSpy()
-  const sut = new LoadDataDetailController(service)
+  const service = new Load{{pascalCase name}}DetailSpy()
+  const sut = new Load{{pascalCase name}}DetailController(service)
   return {
     sut,
     service,
   }
 }
 
-describe('Test Suite for load-data-detail-service.spec', () => {
+describe('Test Suite for load-{{kebabCase name}}-detail-service.spec', () => {
   test('Ensure that load detail in service is called once and with same parameters', async () => {
     const { sut, service } = makeSut()
     const spy = vi
       .spyOn(service, 'load')
-      .mockImplementation(() => Promise.resolve({} as AnyDataModel))
+      .mockImplementation(() => Promise.resolve({} as {{pascalCase name}}Model))
     const data = { id: '1' }
     await sut.handle(data)
     expect(spy).toHaveBeenCalledOnce()
@@ -42,7 +42,7 @@ describe('Test Suite for load-data-detail-service.spec', () => {
   test('Ensure that controller to return http response 204 when there is no data', async () => {
     const { sut, service } = makeSut()
     vi.spyOn(service, 'load').mockImplementationOnce(async () => {
-      return Promise.resolve(null as unknown as AnyDataModel)
+      return Promise.resolve(null as unknown as {{pascalCase name}}Model)
     })
     const data = { id: '1' }
     const result = await sut.handle(data)

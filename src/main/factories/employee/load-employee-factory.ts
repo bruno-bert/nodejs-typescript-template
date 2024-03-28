@@ -1,7 +1,7 @@
 import { Controller } from '@presentation/protocols'
 
-import { LoadEmployeeMongoRepository } from '@infra'
-// import { LoadEmployeePrismaRepository } from '@infra'
+import { LoadEmployeeMongoRepository } from '@infra/database/mongodb/employee'
+// import { LoadEmployeePrismaRepository }  from '@infra/database/prisma/employee'
 
 import {
   DbLoadEmployee,
