@@ -4,5 +4,72 @@ import { makeEdit{{pascalCase name}}Factory } from '@main/factories'
 import { Router } from 'express'
 
 export default (router: Router): void => {
+/**
+   * @openapi
+   * /api/{{kebabCase name}}/{id}:
+   *   put:
+   *     summary: Updates a {{pascalCase name}}
+   *     description: Updates a {{pascalCase name}}
+   *     parameters:
+   *        - name: id
+   *          in: path
+   *          description: ID of the resource to be updated
+   *          required: true
+   *          schema:
+   *            type: string
+   *     security:
+   *        - bearerAuth: []
+   *     requestBody:
+   *       description: body of the request
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+{{listPropertiesOpenApi fields 15}}
+   *     responses:
+   *       200:
+   *         description: Returns the updated record of {{pascalCase name}}
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 id:
+   *                   type: string
+{{listPropertiesOpenApi fields 17}}
+   *       401:
+   *         description: Unauthorized
+   *         content:
+   *           application/json:
+   *             schema:
+   *                   type: object
+   *                   properties:
+   *                       error:
+   *                         type: string
+   *                         description: The error message
+   *       404:
+   *         description: Not Found
+   *         content:
+   *           application/json:
+   *             schema:
+   *                   type: object
+   *                   properties:
+   *                       error:
+   *                         type: string
+   *                         description: The validation message
+   *
+   *       500:
+   *         description: Internal Server Error
+   *         content:
+   *           application/json:
+   *             schema:
+   *                   type: object
+   *                   properties:
+   *                       error:
+   *                         type: string
+   *                         description: The error message
+   */  
   router.put('/{{kebabCase name}}/:id', adaptRoute(makeEdit{{pascalCase name}}Factory().makeController()))
 }

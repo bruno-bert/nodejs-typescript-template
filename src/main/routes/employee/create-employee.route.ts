@@ -17,40 +17,35 @@ export default (router: Router): void => {
    *       required: true
    *       content:
    *         application/json:
-   *          schema:
-   *              type: object
-   *              properties:
-   *                  name:
-   *                      type: string
-   *                      description: The country's name.
+   *           schema:
+   *             type: object
+   *             properties:
+   *               name: 
+   *                 type: string 
+   *               date: 
+   *                 type: string 
+   *                 format: date 
+   *               welcomeMessage: 
+   *                 type: string 
+
    *     responses:
    *       200:
    *         description: Returns the created record of Employee
    *         content:
    *           application/json:
    *             schema:
-   *                     type: object
-   *                     properties:
-   *                       name:
-   *                         type: string
-   *                         description: The country's name.
-   *                       id:
-   *                         type: string
-   *                         description: The country's id.
-   *                       createdat:
-   *                         type: string
-   *                         format: date-time
-   *                         description: The country's createdat.
-   *                       updatedat:
-   *                         type: string
-   *                         format: date-time
-   *                         description: The country's updatedat.
-   *                       createdBy:
-   *                         type: string
-   *                         description: The country's createdBy.
-   *                       lastUpdatedBy:
-   *                         type: string
-   *                         description: The country's lastUpdatedBy.
+   *               type: object
+   *               properties:
+   *                 id:
+   *                   type: string
+   *                 name: 
+   *                   type: string 
+   *                 date: 
+   *                   type: string 
+   *                   format: date 
+   *                 welcomeMessage: 
+   *                   type: string 
+
    *       401:
    *         description: Unauthorized
    *         content:

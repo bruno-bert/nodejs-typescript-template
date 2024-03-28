@@ -18,7 +18,8 @@
     "generate:docs": "node scripts/create-open-api.js",
     "prepare": "husky",
     "fix-after": "node scripts/fix-single-quotes.js",
-    "generate": "plop --plopfile plop/generators/plopfile.js --force && npm run fix-after && npm run lint && vitest run && npm run generate:docs"
+    "generate": "plop --plopfile plop/generators/plopfile.js --force && npm run fix-after && npm run lint",
+    "generate-and-test": "npm run generate && vitest run && npm run generate:docs"
   },
   "keywords": [],
   "author": "",

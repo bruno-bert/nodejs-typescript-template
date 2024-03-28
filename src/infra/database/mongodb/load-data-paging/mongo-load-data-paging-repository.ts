@@ -17,9 +17,6 @@ export class LoadDataPagingMongoRepository
           name: 1,
           date: 1,
         })
-        // .match({
-        //   accountId: accountId
-        // })
         .build()
       const documents = await AnyDataCollection.aggregate(query).toArray()
       return MongoHelper.mapCollection(documents)

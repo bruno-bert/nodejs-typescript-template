@@ -1,3 +1,93 @@
+function spaces(num) {
+  return ' '.repeat(num)
+}
+
+const parseFields = (fields) => {
+  const arrayOfFields = fields.split(',').map((field) => field.trim())
+  const newArray = []
+  for (let i = 0; i < arrayOfFields.length; i++) {
+    const field = arrayOfFields[i]
+    let name = ''
+    let type = ''
+    try {
+      name = field.split(':')[0]
+      type = field.split(':')[1]
+    } catch (error) {
+      name = field
+      type = 'string'
+    }
+    if (!isDate(type)) newArray.push({ name, type })
+    else newArray.push({ name, type, format: 'date' })
+  }
+  return newArray
+}
+
+const isDate = (type) => {
+  const upperType = String(type).toUpperCase()
+  return (
+    upperType === 'DATE' ||
+    upperType === 'DATETIME' ||
+    upperType === 'DATE-TIME' ||
+    upperType === 'TIMESTAMP'
+  )
+}
+
+const convertTypeOpenApi = (type) => {
+  switch (String(type).toUpperCase()) {
+    case 'TEXT':
+    case 'STRING': {
+      return 'string'
+    }
+    case 'DATE':
+    case 'DATETIME':
+    case 'DATE-TIME':
+    case 'TIMESTAMP': {
+      return 'string'
+    }
+    default: {
+      return 'string'
+    }
+  }
+}
+const convertTypeJsonSchema = (type) => {
+  switch (String(type).toUpperCase()) {
+    case 'TEXT':
+    case 'STRING': {
+      return 'string'
+    }
+    default: {
+      return 'string'
+    }
+  }
+}
+const convertTypeTypeScript = (type) => {
+  switch (String(type).toUpperCase()) {
+    case 'TEXT':
+    case 'STRING': {
+      return 'string'
+    }
+    default: {
+      return 'string'
+    }
+  }
+}
+const convertType = (type, spec) => {
+  switch (spec) {
+    case 'openapi': {
+      return convertTypeOpenApi(type)
+    }
+    case 'json-schema': {
+      return convertTypeJsonSchema(type)
+    }
+    case 'typescript': {
+      return convertTypeTypeScript(type)
+    }
+    default: {
+      return convertTypeTypeScript(type)
+    }
+  }
+}
+
 module.exports = (plop) => {
   plop.setHelper('mockFields', (fields) => {
     const arrayOfFields = fields.split(',').map((field) => field.trim())
@@ -106,6 +196,22 @@ module.exports = (plop) => {
     return text
   })
 
+  plop.setHelper('listPropertiesOpenApi', (fields, initialIndentation) => {
+    const parsedFields = parseFields(fields)
+    initialIndentation = initialIndentation || 0
+    let text = ''
+    for (let i = 0; i < parsedFields.length; i++) {
+      const name = parsedFields[i].name
+      const type = convertType(parsedFields[i].type, 'openapi')
+      const additionalIndentationBetweenLevels = 2
+      text += `${spaces(3)}*${spaces(initialIndentation)}${name}: \n`
+      text += `${spaces(3)}*${spaces(initialIndentation + additionalIndentationBetweenLevels)}type: ${type} \n`
+      if (parsedFields[i].format)
+        text += `${spaces(3)}*${spaces(initialIndentation + additionalIndentationBetweenLevels)}format: ${parsedFields[i].format} \n`
+    }
+    return text
+  })
+
   plop.setHelper('listFieldsJsonSchema', (fields) => {
     const arrayOfFields = fields.split(',').map((field) => field.trim())
 
@@ -143,7 +249,13 @@ module.exports = (plop) => {
             text += `},\n`
             break
           }
-          case 'date':
+          case 'date': {
+            text += `${name}: {\n`
+            text += `type: 'string', \n`
+            text += `format: 'date', \n`
+            text += `},\n`
+            break
+          }
           case 'datetime': {
             text += `${name}: {\n`
             text += `type: 'string', \n`

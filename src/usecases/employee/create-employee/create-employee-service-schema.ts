@@ -7,7 +7,7 @@ export const schema = {
     },
     date: {
       type: 'string',
-      format: 'date-time',
+      format: 'date',
     },
     welcomeMessage: {
       type: 'string',

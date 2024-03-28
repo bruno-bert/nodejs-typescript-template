@@ -14,9 +14,9 @@ async function generateSwaggerDocs() {
   const swaggerDefinition = {
     openapi: '3.0.0',
     info: {
-      title: 'Your App Title',
+      title: 'My Application',
       version: '0.0.1',
-      description: 'Your Application Description',
+      description: 'My Application Description',
       license: {
         name: 'Licensed Under MIT',
         url: 'https://spdx.org/licenses/MIT.html',
@@ -29,7 +29,7 @@ async function generateSwaggerDocs() {
     },
     servers: [
       {
-        url: 'http://localhost:9000',
+        url: 'http://localhost:5050',
         description: 'Development server',
       },
     ],

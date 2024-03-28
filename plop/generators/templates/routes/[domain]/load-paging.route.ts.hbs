@@ -3,8 +3,61 @@ import { makeLoad{{pascalCase name}}PagingFactory } from '@main/factories'
 import { Router } from 'express'
 
 export default (router: Router): void => {
+ /**
+   * @openapi
+   * /api/{{kebabCase name}}-paging:
+   *   get:
+   *     summary: Returns a list of {{pascalCase name}} with pagination and sorting capabilities
+   *     description: Returns a list of {{pascalCase name}} with pagination and sorting capabilities
+   *     security:
+   *        - bearerAuth: []
+   *     responses:
+   *       200:
+   *         description: Returns a list of records of {{pascalCase name}}
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 type: object
+   *                 properties:
+   *                   id:
+   *                     type: string
+{{listPropertiesOpenApi fields 19}}
+   *       401:
+   *         description: Unauthorized
+   *         content:
+   *           application/json:
+   *             schema:
+   *                   type: object
+   *                   properties:
+   *                       error:
+   *                         type: string
+   *                         description: The error message
+   *       404:
+   *         description: Not Found
+   *         content:
+   *           application/json:
+   *             schema:
+   *                   type: object
+   *                   properties:
+   *                       error:
+   *                         type: string
+   *                         description: The validation message
+   *
+   *       500:
+   *         description: Internal Server Error
+   *         content:
+   *           application/json:
+   *             schema:
+   *                   type: object
+   *                   properties:
+   *                       error:
+   *                         type: string
+   *                         description: The error message
+   */    
   router.get(
-    '/{{kebabCase name}}/paging',
+    '/{{kebabCase name}}-paging',
     adaptRoute(makeLoad{{pascalCase name}}PagingFactory().makeController()),
   )
 }
