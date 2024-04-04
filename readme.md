@@ -13,10 +13,11 @@ Repository: https://github.com/bruno-bert/nodejs-typescript-template.git
 - Plop templates and actions to create other domain structures in clean code standards
 
 ### Code
-- Clean Architecture for a basid crud
-- Paging and Sorting endpoints
-- Unit tests for the basic crud
+- Clean Architecture for a Basid crud
+- Pagination, Sorting and Complex Filter Endpoints
+- Unit tests for services, controllers and infrastructure
 - Export to Excel endpoint
+- Export to CSV endpoint
 - NodeJS Prometheus Client Middleware for Monitoring
 - Prisma ORM in infrastructure layer 
 - OpenAPI specification automatically generated in /docs

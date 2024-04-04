@@ -21,126 +21,10 @@
     }
   ],
   "paths": {
-    "/api/data": {
+    "/api/shark": {
       "post": {
-        "summary": "Creates a data",
-        "description": "Creates a data",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "description": "body of the request",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "The country's name."
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Returns the created record of country",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string",
-                      "description": "The country's name."
-                    },
-                    "id": {
-                      "type": "string",
-                      "description": "The country's id."
-                    },
-                    "createdat": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "The country's createdat."
-                    },
-                    "updatedat": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "The country's updatedat."
-                    },
-                    "createdBy": {
-                      "type": "string",
-                      "description": "The country's createdBy."
-                    },
-                    "lastUpdatedBy": {
-                      "type": "string",
-                      "description": "The country's lastUpdatedBy."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "description": "The error message"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "description": "The validation message"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "description": "The error message"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/employee": {
-      "post": {
-        "summary": "Creates a Employee",
-        "description": "Creates a Employee",
+        "summary": "Creates a Shark",
+        "description": "Creates a Shark",
         "security": [
           {
             "bearerAuth": []
@@ -171,7 +55,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returns the created record of Employee",
+            "description": "Returns the created record of Shark",
             "content": {
               "application/json": {
                 "schema": {
@@ -246,8 +130,8 @@
         }
       },
       "get": {
-        "summary": "Returns a list of Employee",
-        "description": "Returns a list of Employee",
+        "summary": "Returns a list of Shark",
+        "description": "Returns a list of Shark",
         "security": [
           {
             "bearerAuth": []
@@ -255,7 +139,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns a list of records of Employee",
+            "description": "Returns a list of records of Shark",
             "content": {
               "application/json": {
                 "schema": {
@@ -333,10 +217,10 @@
         }
       }
     },
-    "/api/employee/{id}": {
+    "/api/shark/{id}": {
       "put": {
-        "summary": "Updates a Employee",
-        "description": "Updates a Employee",
+        "summary": "Updates a Shark",
+        "description": "Updates a Shark",
         "parameters": [
           {
             "name": "id",
@@ -378,7 +262,7 @@
         },
         "responses": {
           "200": {
-            "description": "Returns the updated record of Employee",
+            "description": "Returns the updated record of Shark",
             "content": {
               "application/json": {
                 "schema": {
@@ -453,8 +337,8 @@
         }
       },
       "get": {
-        "summary": "Gets details of a Employee",
-        "description": "Get details of a Employee",
+        "summary": "Gets details of a Shark",
+        "description": "Get details of a Shark",
         "parameters": [
           {
             "name": "id",
@@ -473,7 +357,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns the updated record of Employee",
+            "description": "Returns the updated record of Shark",
             "content": {
               "application/json": {
                 "schema": {
@@ -548,10 +432,10 @@
         }
       }
     },
-    "/api/employee-paging": {
+    "/api/shark-csv": {
       "get": {
-        "summary": "Returns a list of Employee with pagination and sorting capabilities",
-        "description": "Returns a list of Employee with pagination and sorting capabilities",
+        "summary": "Returns a list of Shark with pagination and sorting capabilities",
+        "description": "Returns a list of Shark with pagination and sorting capabilities",
         "security": [
           {
             "bearerAuth": []
@@ -559,7 +443,94 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns a list of records of Employee",
+            "description": "Returns a list of records of Shark",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "date": {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      "welcomeMessage": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "The error message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "The validation message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "The error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Returns a list of Shark with pagination and sorting capabilities",
+        "description": "Returns a list of Shark with pagination and sorting capabilities",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a list of records of Shark",
             "content": {
               "application/json": {
                 "schema": {
@@ -637,65 +608,38 @@
         }
       }
     },
-    "/api/order": {
-      "post": {
-        "summary": "Creates a Order",
-        "description": "Creates a Order",
+    "/api/shark-paging": {
+      "get": {
+        "summary": "Returns a list of Shark with pagination and sorting capabilities",
+        "description": "Returns a list of Shark with pagination and sorting capabilities",
         "security": [
           {
             "bearerAuth": []
           }
         ],
-        "requestBody": {
-          "description": "body of the request",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "The country's name."
-                  }
-                }
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
-            "description": "Returns the created record of Order",
+            "description": "Returns a list of records of Shark",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string",
-                      "description": "The country's name."
-                    },
-                    "id": {
-                      "type": "string",
-                      "description": "The country's id."
-                    },
-                    "createdat": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "The country's createdat."
-                    },
-                    "updatedat": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "The country's updatedat."
-                    },
-                    "createdBy": {
-                      "type": "string",
-                      "description": "The country's createdBy."
-                    },
-                    "lastUpdatedBy": {
-                      "type": "string",
-                      "description": "The country's lastUpdatedBy."
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "date": {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      "welcomeMessage": {
+                        "type": "string"
+                      }
                     }
                   }
                 }
