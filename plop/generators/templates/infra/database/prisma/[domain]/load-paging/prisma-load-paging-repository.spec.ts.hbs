@@ -1,0 +1,30 @@
+import { describe, expect, test, beforeEach } from 'vitest'
+import { Load{{pascalCase name}}PagingPrismaRepository } from './prisma-load-{{kebabCase name}}-paging-repository'
+import { prismaClient as prisma } from '../../utils'
+import { mockCreate{{pascalCase name}}Params } from '@test-mocks'
+
+const makeSut = () => {
+  return {
+    sut: new Load{{pascalCase name}}PagingPrismaRepository(),
+  }
+}
+
+beforeEach(async () => {
+  await prisma.{{camelCase name}}.deleteMany({})
+})
+
+describe('Test Suite for prisma-load-{{kebabCase name}}-paging-repository.spec', () => {
+  test('Ensure that load {{kebabCase name}} paging will return items', async () => {
+    await prisma.{{camelCase name}}.create({
+      data: mockCreate{{pascalCase name}}Params() as any,
+    })
+    await prisma.{{camelCase name}}.create({
+      data: mockCreate{{pascalCase name}}Params() as any,
+    })
+
+    const { sut } = makeSut()
+    const result = await sut.loadPaging()
+
+    expect(result.length).toEqual(2)
+  })
+})

@@ -1,0 +1,22 @@
+import { DatabaseCreate{{pascalCase name}}Error } from '@usecases/{{kebabCase name}}/create-{{kebabCase name}}/errors'
+import { PrismaHelper, prismaClient as prisma } from '../../utils'
+import { Create{{pascalCase name}}RepositoryProtocol } from '@usecases'
+
+export class Create{{pascalCase name}}PrismaRepository
+  implements Create{{pascalCase name}}RepositoryProtocol
+{
+  async create(
+    params: Create{{pascalCase name}}RepositoryProtocol.Params,
+  ): Promise<Create{{pascalCase name}}RepositoryProtocol.Result> {
+    try {
+      const item = await prisma.{{camelCase name}}.create({
+        data: params,
+      })
+
+      return PrismaHelper.map(item)
+    } catch (error) {
+      console.log(`error`, error)
+      throw new DatabaseCreate{{pascalCase name}}Error(error as string)
+    }
+  }
+}

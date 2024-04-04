@@ -1,5 +1,0 @@
-export * from '@main/factories/employee/edit-employee-factory'
-export * from './edit-employee-controller'
-export * from './edit-employee-model'
-export * from './edit-employee-service'
-export * from './protocols'

@@ -12,7 +12,7 @@ export class Edit{{pascalCase name}}Controller implements Controller {
     id,
    {{listFieldNames fields}}
   }: Edit{{pascalCase name}}Controller.Request): Promise<Edit{{pascalCase name}}Model.Params> {
-    return { id, {{listFieldNames fields}} }
+    return { id, {{listMappedFields fields}} }
   }
 
   async handle({
@@ -37,6 +37,6 @@ export class Edit{{pascalCase name}}Controller implements Controller {
 export namespace Edit{{pascalCase name}}Controller {
   export type Request = {
     id: string
-    {{listFieldsTypescript fields}}
+    {{listFieldsTypescript fields 'string'}}
   }
 }

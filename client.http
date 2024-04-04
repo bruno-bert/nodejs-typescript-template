@@ -1,42 +1,52 @@
-GET http://localhost:5050/api/data
+GET http://localhost:5050/api/shark
 
-###
+### csv
 
-GET http://localhost:5050/api/data/65f9acbe0788d490b445ae81
+GET http://localhost:5050/api/shark-csv
 
-###
+### excel
 
-DELETE http://localhost:5050/api/data/dsdsds
+GET http://localhost:5050/api/shark-excel
 
 
-###
 
-PUT http://localhost:5050/api/data/65f9acbe0788d490b445ae81
+### details
+
+GET http://localhost:5050/api/shark/e27a3612-d3da-454c-ad67-d03c234b1e6b
+
+### delete
+
+DELETE http://localhost:5050/api/shark/e27a3612-d3da-454c-ad67-d03c234b1e6b
+
+
+### paging
+
+GET http://localhost:5050/api/shark-paging
+
+### update 
+
+PUT http://localhost:5050/api/shark/e27a3612-d3da-454c-ad67-d03c234b1e6b
 content-type: application/json
 
 {
     
-    "welcomeMessage": "Hello Tester!"
+    "welcomeMessage": "Hello Tester!",
+    "date": "2010-01-01"
+
 }
 
 ### Success 200
 
-POST http://localhost:5050/api/data
+POST http://localhost:5050/api/shark
 content-type: application/json
 
 {
     "name": "Tester",
-    "welcomeMessage": "Hello Tester!"
+    "welcomeMessage": "Hello Tester!",
+    "date": "2010-01-01"
 }
 
-###  Error 400
-POST http://localhost:5050/api/data
-content-type: application/json
 
-{
-   
-    "welcomeMessage": "Hello Tester!"
-}
 
 ###
 

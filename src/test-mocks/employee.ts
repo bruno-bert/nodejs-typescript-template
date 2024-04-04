@@ -1,12 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  randFullName,
-  randGitCommitMessage,
-  randRecentDate,
-  randText,
-  randUuid,
-  randWord,
-} from '@ngneat/falso'
+import { randRecentDate, randText, randUuid } from '@ngneat/falso'
 
 import {
   CreateEmployeeModel,
@@ -25,8 +18,26 @@ import {
   LoadEmployeeProtocol,
   LoadEmployeePagingProtocol,
   LoadEmployeeDetailProtocol,
+  CreateEmployeeController,
+  EditEmployeeController,
 } from '@usecases'
 import { ValidatorProtocol } from '@utils'
+
+export const mockCreateEmployeeRequest =
+  (): CreateEmployeeController.Request => ({
+    name: randText(),
+    date: randRecentDate().toISOString(),
+    welcomeMessage: randText(),
+  })
+
+export const mockEditEmployeeRequest = (
+  id: string,
+): EditEmployeeController.Request => ({
+  id,
+  name: randText(),
+  date: randRecentDate().toISOString(),
+  welcomeMessage: randText(),
+})
 
 export const mockCreateEmployeeParams = (): CreateEmployeeModel.Params => ({
   name: randText(),
@@ -91,7 +102,7 @@ export class EditEmployeeSpy implements EditEmployeeProtocol {
   async edit(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     id: string,
-    params: EdiEmployeeModel.Params,
+    params: EditEmployeeModel.Params,
   ): Promise<EditEmployeeProtocol.Result> {
     return this.result
   }

@@ -1,0 +1,25 @@
+import { describe, expect, test, beforeEach } from 'vitest'
+import { Create{{pascalCase name}}PrismaRepository } from './prisma-create-{{kebabCase name}}-repository'
+import { prismaClient as prisma } from '../../utils'
+
+import { mockCreate{{pascalCase name}}Params } from '@test-mocks'
+
+const makeSut = () => {
+  return {
+    sut: new Create{{pascalCase name}}PrismaRepository(),
+  }
+}
+
+beforeEach(async () => {
+  await prisma.{{camelCase name}}.deleteMany({})
+})
+
+describe('Test Suite for prisma-create-{{kebabCase name}}-repository.spec', () => {
+  test('Ensure that create-{{kebabCase name}} will return inserted params', async () => {
+    const item = mockCreate{{pascalCase name}}Params()
+    const { sut } = makeSut()
+    const result = await sut.create(item)
+
+     {{listFieldsForTests fields}}
+  })
+})

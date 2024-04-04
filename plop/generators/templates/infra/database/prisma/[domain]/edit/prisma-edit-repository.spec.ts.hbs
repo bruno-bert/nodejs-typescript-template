@@ -1,0 +1,44 @@
+import { describe, expect, test, beforeEach } from 'vitest'
+import { Edit{{pascalCase name}}PrismaRepository } from './prisma-edit-{{kebabCase name}}-repository'
+import { prismaClient as prisma } from '../../utils'
+import { mockCreate{{pascalCase name}}Params, mockEdit{{pascalCase name}}Params } from '@test-mocks'
+import { DatabaseEdit{{pascalCase name}}NotFoundError } from '@usecases/{{kebabCase name}}/edit-{{kebabCase name}}/errors'
+
+const makeSut = () => {
+  return {
+    sut: new Edit{{pascalCase name}}PrismaRepository(),
+  }
+}
+
+beforeEach(async () => {
+  await prisma.{{camelCase name}}.deleteMany({})
+})
+
+describe('Test Suite for prisma-edit-{{kebabCase name}}-repository.spec', () => {
+  test('Ensure that edit {{kebabCase name}} will return required id and updated params', async () => {
+    const record = await prisma.{{camelCase name}}.create({
+      data: mockCreate{{pascalCase name}}Params() as any,
+    })
+
+    const { sut } = makeSut()
+
+    const item = mockEdit{{pascalCase name}}Params(record.id)
+    const result = await sut.edit(record.id, item)
+    expect(result.id).toEqual(record.id)
+    {{listFieldsForTests fields}}
+  })
+
+  test('Ensure that edit {{kebabCase name}} returns correct error when id is not found', async () => {
+    await prisma.{{camelCase name}}.create({
+      data: mockCreate{{pascalCase name}}Params() as any,
+    })
+
+    const { sut } = makeSut()
+    const otherId = '1'
+    const item = mockEdit{{pascalCase name}}Params(otherId)
+    const promise = sut.edit(otherId, item)
+    await expect(promise).rejects.toThrowError(
+      DatabaseEdit{{pascalCase name}}NotFoundError,
+    )
+  })
+})

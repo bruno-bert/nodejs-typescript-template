@@ -1,0 +1,19 @@
+import { Load{{pascalCase name}}PagingRepositoryProtocol } from '@usecases'
+import { PrismaHelper, prismaClient as prisma } from '../../utils'
+import { DatabaseLoad{{pascalCase name}}PagingError } from '@usecases/{{kebabCase name}}/load-{{kebabCase name}}-paging/errors'
+
+export class Load{{pascalCase name}}PagingPrismaRepository
+  implements Load{{pascalCase name}}PagingRepositoryProtocol
+{
+  async loadPaging(): Promise<Load{{pascalCase name}}PagingRepositoryProtocol.Result> {
+    try {
+      const where: any = {}
+
+      const items = await prisma.{{camelCase name}}.findMany({ where })
+
+      return PrismaHelper.mapCollection(items)
+    } catch (error) {
+      throw new DatabaseLoad{{pascalCase name}}PagingError(error as string)
+    }
+  }
+}

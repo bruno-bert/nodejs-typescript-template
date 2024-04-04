@@ -10,7 +10,7 @@ export class Create{{pascalCase name}}Controller implements Controller {
   async map({
     {{listFieldNames fields}}
   }: Create{{pascalCase name}}Controller.Request): Promise<Create{{pascalCase name}}Model.Params> {
-    return { {{listFieldNames fields}} }
+    return { {{listMappedFields fields}} }
   }
 
   async handle({
@@ -32,6 +32,6 @@ export class Create{{pascalCase name}}Controller implements Controller {
 export namespace Create{{pascalCase name}}Controller {
   /** This is the request received from the client */
   export type Request = {
-    {{listFieldsTypescript fields}}
+    {{listFieldsTypescript fields 'string'}}
   }
 }

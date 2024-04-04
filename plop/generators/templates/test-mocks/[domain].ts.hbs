@@ -25,8 +25,24 @@ import {
   Load{{pascalCase name}}Protocol,
   Load{{pascalCase name}}PagingProtocol,
   Load{{pascalCase name}}DetailProtocol,
+  Create{{pascalCase name}}Controller,
+  Edit{{pascalCase name}}Controller,
 } from '@usecases'
 import { ValidatorProtocol } from '@utils'
+
+
+export const mockCreate{{pascalCase name}}Request =
+  (): Create{{pascalCase name}}Controller.Request => ({
+    {{mockFieldsForRequests fields}}
+  })
+
+export const mockEdit{{pascalCase name}}Request = (
+  id: string,
+): Edit{{pascalCase name}}Controller.Request => ({
+  id,
+  {{mockFieldsForRequests fields}}
+})
+
 
 export const mockCreate{{pascalCase name}}Params = (): Create{{pascalCase name}}Model.Params => ({
   {{mockFields fields}}

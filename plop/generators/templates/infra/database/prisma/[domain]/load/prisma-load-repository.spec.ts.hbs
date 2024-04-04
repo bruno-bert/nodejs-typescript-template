@@ -1,0 +1,30 @@
+import { describe, expect, test, beforeEach } from 'vitest'
+import { Load{{pascalCase name}}PrismaRepository } from './prisma-load-{{kebabCase name}}-repository'
+import { prismaClient as prisma } from '../../utils'
+import { mockCreate{{pascalCase name}}Params } from '@test-mocks'
+
+const makeSut = () => {
+  return {
+    sut: new Load{{pascalCase name}}PrismaRepository(),
+  }
+}
+
+beforeEach(async () => {
+  await prisma.{{camelCase name}}.deleteMany({})
+})
+
+describe('Test Suite for prisma-load-{{kebabCase name}}-repository.spec', () => {
+  test('Ensure that load {{kebabCase name}} will return items', async () => {
+    await prisma.{{camelCase name}}.create({
+      data: mockCreate{{pascalCase name}}Params() as any,
+    })
+    await prisma.{{camelCase name}}.create({
+      data: mockCreate{{pascalCase name}}Params() as any,
+    })
+
+    const { sut } = makeSut()
+    const result = await sut.loadAll()
+
+    expect(result.length).toEqual(2)
+  })
+})

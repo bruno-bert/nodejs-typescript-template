@@ -14,8 +14,16 @@ export default {
   jwtSecret: process.env.JWT_SECRET || 'tj67O==5H',
 
   databaseType: process.env.DATABASE_TYPE || 'MONGODB',
+
+  prismaType: process.env.PRISMA_TYPE || 'sqlite',
+  sqliteFile: process.env.SQLITE_FILE || 'file:./dev.d',
+
   metricsServerPort: process.env.METRICS_SERVER_PORT || '5051',
   metricsType: process.env.METRICS_TYPE || 'PROMETHEUS',
   validatorType: process.env.VALIDATOR_TYPE || 'ZOD',
-  addLogDecorator: isTrue(process.env.ADD_LOG_DECORATOR) || true,
+  addLogDecorator: (function () {
+    const result = isTrue(process.env.ADD_LOG_DECORATOR)
+    if (!result) return false
+    return true
+  })(),
 }

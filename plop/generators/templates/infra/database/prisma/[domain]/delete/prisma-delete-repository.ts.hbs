@@ -1,0 +1,42 @@
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { prismaClient as prisma } from '../../utils'
+import {
+  DatabaseInvalidIdError,
+  Delete{{pascalCase name}}RepositoryProtocol,
+} from '@usecases'
+import {
+  DatabaseDelete{{pascalCase name}}Error,
+  DatabaseDelete{{pascalCase name}}NotFoundError,
+} from '@usecases/{{kebabCase name}}/delete-{{kebabCase name}}/errors'
+
+export class Delete{{pascalCase name}}PrismaRepository
+  implements Delete{{pascalCase name}}RepositoryProtocol
+{
+  async delete({
+    id,
+  }: Delete{{pascalCase name}}RepositoryProtocol.Params): Promise<Delete{{pascalCase name}}RepositoryProtocol.Result> {
+    const where: any = { id }
+
+    try {
+      let item
+
+      try {
+        item = await prisma.{{camelCase name}}.delete({ where })
+        return { success: true, count: 1, item }
+      } catch (error) {
+        if (
+          error instanceof PrismaClientKnownRequestError &&
+          String(error.meta?.cause).toUpperCase().includes('DOES NOT EXIST')
+        ) {
+          throw new DatabaseDelete{{pascalCase name}}NotFoundError('id: ' + id)
+        } else {
+          throw error
+        }
+      }
+    } catch (error) {
+      if (error instanceof DatabaseDelete{{pascalCase name}}NotFoundError) throw error
+      if (error instanceof DatabaseInvalidIdError) throw error
+      throw new DatabaseDelete{{pascalCase name}}Error(error as string)
+    }
+  }
+}

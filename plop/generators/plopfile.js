@@ -1,5 +1,19 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const pascalcase = require('pascal-case')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const camelCase = require('camel-case')
+
 function spaces(num) {
   return ' '.repeat(num)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const toPascalCase = (str) => {
+  return pascalcase.pascalCase(str)
+}
+
+const toCamelCase = (str) => {
+  return camelCase.camelCase(str)
 }
 
 const parseFields = (fields) => {
@@ -71,6 +85,26 @@ const convertTypeTypeScript = (type) => {
     }
   }
 }
+const convertTypePrisma = (type) => {
+  switch (String(type).toUpperCase()) {
+    case 'TEXT':
+    case 'STRING': {
+      return 'String'
+    }
+    case 'DATE':
+    case 'DATETIME': {
+      return 'DateTime'
+    }
+    case 'NUMBER':
+    case 'FLOAT':
+    case 'DECIMAL': {
+      return 'Number'
+    }
+    default: {
+      return 'string'
+    }
+  }
+}
 const convertType = (type, spec) => {
   switch (spec) {
     case 'openapi': {
@@ -82,10 +116,34 @@ const convertType = (type, spec) => {
     case 'typescript': {
       return convertTypeTypeScript(type)
     }
+    case 'prisma': {
+      return convertTypePrisma(type)
+    }
     default: {
       return convertTypeTypeScript(type)
     }
   }
+}
+
+const prismaDefaultsResolver = (defaultValue) => {
+  if (!defaultValue) return ''
+  return ''
+}
+
+const prismaUniquenessResolver = (uniqueColumns) => {
+  if (!uniqueColumns) return ''
+  return ''
+}
+
+const prismaAnnotationsResolver = (name, value) => {
+  if (!name || !value) return ''
+  return ''
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const prismaTypesResolver = (type, required, relation, isenum) => {
+  const convertedType = convertType(type, 'prisma')
+  return convertedType
 }
 
 module.exports = (plop) => {
@@ -134,6 +192,51 @@ module.exports = (plop) => {
     return text
   })
 
+  plop.setHelper('mockFieldsForRequests', (fields) => {
+    const arrayOfFields = fields.split(',').map((field) => field.trim())
+    let text = ''
+    for (let i = 0; i < arrayOfFields.length; i++) {
+      const field = arrayOfFields[i]
+      let name = ''
+      let type = ''
+      try {
+        name = field.split(':')[0]
+        type = field.split(':')[1]
+      } catch (error) {
+        name = field
+        type = 'string'
+      }
+
+      if (String(name).includes('id')) {
+        text += `${name}: randUuid(),\n`
+      } else {
+        switch (type) {
+          case 'string':
+          case 'text': {
+            text += `${name}: randText(),\n`
+            break
+          }
+          case 'number':
+          case 'float':
+          case 'decimal': {
+            text += `${name}: randNumber(),\n`
+            break
+          }
+          case 'date':
+          case 'datetime': {
+            text += `${name}: randRecentDate().toISOString(),\n`
+            break
+          }
+          default: {
+            text += `${name}: randText(),\n`
+            break
+          }
+        }
+      }
+    }
+    return text
+  })
+
   plop.setHelper('listFieldNames', (fields) => {
     const arrayOfFields = fields.split(',').map((field) => field.trim())
     let text = ''
@@ -151,7 +254,22 @@ module.exports = (plop) => {
     return text
   })
 
-  plop.setHelper('listFieldsTypescript', (fields) => {
+  plop.setHelper('prismaFields', (fields) => {
+    const parsedFields = parseFields(fields)
+
+    let text = ''
+    for (let i = 0; i < parsedFields.length; i++) {
+      const name = parsedFields[i].name
+      const type = parsedFields[i].type
+
+      text += `${toCamelCase(name)} ${prismaTypesResolver(type, true, null, false)} ${prismaDefaultsResolver(null)} ${prismaAnnotationsResolver(null, null)} \n`
+    }
+    const uniqueColumns = parsedFields.map((field) => field.name)
+    text += `${prismaUniquenessResolver(uniqueColumns)}`
+    return text
+  })
+
+  plop.setHelper('listMappedFields', (fields) => {
     const arrayOfFields = fields.split(',').map((field) => field.trim())
     let text = ''
     for (let i = 0; i < arrayOfFields.length; i++) {
@@ -166,35 +284,79 @@ module.exports = (plop) => {
         type = 'string'
       }
 
-      if (String(name).includes('id')) {
-        text += `${name}: string\n`
-      } else {
-        switch (type) {
-          case 'string':
-          case 'text': {
-            text += `${name}: string\n`
-            break
-          }
-          case 'number':
-          case 'float':
-          case 'decimal': {
-            text += `${name}: number\n`
-            break
-          }
-          case 'date':
-          case 'datetime': {
-            text += `${name}: Date\n`
-            break
-          }
-          default: {
-            text += `${name}: string\n`
-            break
-          }
+      switch (type) {
+        case 'string':
+        case 'text': {
+          text += `${name},\n`
+          break
+        }
+        case 'number':
+        case 'float':
+        case 'decimal': {
+          text += `${name},\n`
+          break
+        }
+        case 'date':
+        case 'datetime': {
+          text += `${name}: new Date(${name}),\n`
+          break
+        }
+        default: {
+          text += `${name},\n`
+          break
         }
       }
     }
     return text
   })
+
+  plop.setHelper(
+    'listFieldsTypescript',
+    (fields, ovewriteDateTypeTo = 'Date') => {
+      const arrayOfFields = fields.split(',').map((field) => field.trim())
+      let text = ''
+      for (let i = 0; i < arrayOfFields.length; i++) {
+        const field = arrayOfFields[i]
+        let name = ''
+        let type = ''
+        try {
+          name = field.split(':')[0]
+          type = field.split(':')[1]
+        } catch (error) {
+          name = field
+          type = 'string'
+        }
+
+        if (String(name).includes('id')) {
+          text += `${name}: string\n`
+        } else {
+          switch (type) {
+            case 'string':
+            case 'text': {
+              text += `${name}: string\n`
+              break
+            }
+            case 'number':
+            case 'float':
+            case 'decimal': {
+              text += `${name}: number\n`
+              break
+            }
+            case 'date':
+            case 'datetime': {
+              text += `${name}: ${ovewriteDateTypeTo}\n`
+              break
+            }
+            default: {
+              text += `${name}: string\n`
+              break
+            }
+          }
+        }
+      }
+      return text
+    },
+  )
 
   plop.setHelper('listPropertiesOpenApi', (fields, initialIndentation) => {
     const parsedFields = parseFields(fields)
@@ -437,6 +599,7 @@ module.exports = (plop) => {
       },
 
       /** INFRA - DATABASE - MONGODB */
+
       {
         type: 'add',
         path: '../../src/infra/database/mongodb/{{kebabCase name}}/index.ts',
@@ -567,6 +730,153 @@ module.exports = (plop) => {
         path: '../../src/infra/database/mongodb/{{kebabCase name}}/load-{{kebabCase name}}-paging/mongo-load-{{kebabCase name}}-paging-repository.ts',
         templateFile:
           'templates/infra/database/mongodb/[domain]/load-paging/mongo-load-paging-repository.ts.hbs',
+      },
+
+      /** INFRA - DATABASE - PRISMA */
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/{{kebabCase name}}-schema.prisma',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/domain-schema.prisma.hbs',
+      },
+
+      {
+        type: 'append',
+        path: '../../src/infra/database/prisma/index.ts',
+        templateFile: 'templates/infra/database/prisma/index.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/index.ts',
+        templateFile: 'templates/infra/database/prisma/[domain]/index.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/create-{{kebabCase name}}/index.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/create/index.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/create-{{kebabCase name}}/prisma-create-{{kebabCase name}}-repository.spec.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/create/prisma-create-repository.spec.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/create-{{kebabCase name}}/prisma-create-{{kebabCase name}}-repository.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/create/prisma-create-repository.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/delete-{{kebabCase name}}/index.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/delete/index.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/delete-{{kebabCase name}}/prisma-delete-{{kebabCase name}}-repository.spec.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/delete/prisma-delete-repository.spec.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/delete-{{kebabCase name}}/prisma-delete-{{kebabCase name}}-repository.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/delete/prisma-delete-repository.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/edit-{{kebabCase name}}/index.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/edit/index.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/edit-{{kebabCase name}}/prisma-edit-{{kebabCase name}}-repository.spec.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/edit/prisma-edit-repository.spec.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/edit-{{kebabCase name}}/prisma-edit-{{kebabCase name}}-repository.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/edit/prisma-edit-repository.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/load-{{kebabCase name}}/index.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/load/index.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/load-{{kebabCase name}}/prisma-load-{{kebabCase name}}-repository.spec.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/load/prisma-load-repository.spec.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/load-{{kebabCase name}}/prisma-load-{{kebabCase name}}-repository.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/load/prisma-load-repository.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/load-{{kebabCase name}}-detail/index.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/load-detail/index.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/load-{{kebabCase name}}-detail/prisma-load-{{kebabCase name}}-detail-repository.spec.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/load-detail/prisma-load-detail-repository.spec.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/load-{{kebabCase name}}-detail/prisma-load-{{kebabCase name}}-detail-repository.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/load-detail/prisma-load-detail-repository.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/load-{{kebabCase name}}-paging/index.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/load-paging/index.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/load-{{kebabCase name}}-paging/prisma-load-{{kebabCase name}}-paging-repository.spec.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/load-paging/prisma-load-paging-repository.spec.ts.hbs',
+      },
+
+      {
+        type: 'add',
+        path: '../../src/infra/database/prisma/{{kebabCase name}}/load-{{kebabCase name}}-paging/prisma-load-{{kebabCase name}}-paging-repository.ts',
+        templateFile:
+          'templates/infra/database/prisma/[domain]/load-paging/prisma-load-paging-repository.ts.hbs',
       },
 
       /** USE CASES  */

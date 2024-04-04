@@ -1,5 +1,0 @@
-export * from './load-data-detail-controller'
-export * from '@main/factories/data/load-data-detail-factory'
-export * from './load-data-detail-model'
-export * from './load-data-detail-service'
-export * from './protocols'

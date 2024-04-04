@@ -1,5 +1,0 @@
-export * from './load-employee-paging-controller'
-export * from './load-employee-paging-service'
-export * from '@main/factories/employee/load-employee-paging-factory'
-export * from '../employee-model'
-export * from './protocols'

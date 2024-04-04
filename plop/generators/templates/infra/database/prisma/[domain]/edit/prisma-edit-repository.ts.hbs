@@ -1,0 +1,44 @@
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
+import { PrismaHelper, prismaClient as prisma } from '../../utils'
+import {
+  DatabaseInvalidIdError,
+  Edit{{pascalCase name}}RepositoryProtocol,
+} from '@usecases'
+import {
+  DatabaseEdit{{pascalCase name}}Error,
+  DatabaseEdit{{pascalCase name}}NotFoundError,
+} from '@usecases/{{kebabCase name}}/edit-{{kebabCase name}}/errors'
+
+export class Edit{{pascalCase name}}PrismaRepository
+  implements Edit{{pascalCase name}}RepositoryProtocol
+{
+  async edit(
+    id: string,
+    params: Edit{{pascalCase name}}RepositoryProtocol.Params,
+  ): Promise<Edit{{pascalCase name}}RepositoryProtocol.Result> {
+    try {
+      const where: any = { id }
+
+      let item
+
+      try {
+        item = await prisma.{{camelCase name}}.update({ where, data: params })
+      } catch (error) {
+        if (
+          error instanceof PrismaClientKnownRequestError &&
+          String(error.meta?.cause).toUpperCase().includes('NOT FOUND')
+        ) {
+          throw new DatabaseEdit{{pascalCase name}}NotFoundError('id: ' + id)
+        } else {
+          throw error
+        }
+      }
+
+      return PrismaHelper.map(item)
+    } catch (error) {
+      if (error instanceof DatabaseEdit{{pascalCase name}}NotFoundError) throw error
+      if (error instanceof DatabaseInvalidIdError) throw error
+      throw new DatabaseEdit{{pascalCase name}}Error(error as string)
+    }
+  }
+}

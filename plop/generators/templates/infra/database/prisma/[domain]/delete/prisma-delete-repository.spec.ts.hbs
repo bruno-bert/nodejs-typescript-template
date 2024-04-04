@@ -1,0 +1,45 @@
+import { describe, expect, test, beforeEach } from 'vitest'
+import { Delete{{pascalCase name}}PrismaRepository } from './prisma-delete-{{kebabCase name}}-repository'
+import { prismaClient as prisma } from '../../utils'
+import { mockCreate{{pascalCase name}}Params } from '@test-mocks'
+import { DatabaseDelete{{pascalCase name}}NotFoundError } from '@usecases/{{kebabCase name}}/delete-{{kebabCase name}}/errors'
+
+const makeSut = () => {
+  return {
+    sut: new Delete{{pascalCase name}}PrismaRepository(),
+  }
+}
+
+beforeEach(async () => {
+  await prisma.{{camelCase name}}.deleteMany({})
+})
+
+describe('Test Suite for prisma-delete-{{kebabCase name}}-repository.spec', () => {
+  test('Ensure that delete {{kebabCase name}} will return correct count of deleted record', async () => {
+    const record = await prisma.{{camelCase name}}.create({
+      data: mockCreate{{pascalCase name}}Params() as any,
+    })
+
+    const { sut } = makeSut()
+
+    const result = await sut.delete({ id: record.id })
+
+    expect(result.success).toEqual(true)
+    expect(result.count).toEqual(1)
+    expect(result.item).toEqual(record)
+  })
+
+  test('Ensure that delete {{kebabCase name}} returns correct error when id is not found', async () => {
+    await prisma.{{camelCase name}}.create({
+      data: mockCreate{{pascalCase name}}Params() as any,
+    })
+
+    const { sut } = makeSut()
+    const otherId = '1'
+
+    const promise = sut.delete({ id: otherId })
+    await expect(promise).rejects.toThrowError(
+      DatabaseDelete{{pascalCase name}}NotFoundError,
+    )
+  })
+})

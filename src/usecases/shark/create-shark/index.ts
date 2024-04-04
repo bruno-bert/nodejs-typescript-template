@@ -1,0 +1,5 @@
+export * from '@main/factories/shark/create-shark-factory'
+export * from './create-shark-controller'
+export * from './create-shark-model'
+export * from './create-shark-service'
+export * from './protocols'

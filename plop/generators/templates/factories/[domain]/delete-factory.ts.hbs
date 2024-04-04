@@ -1,7 +1,7 @@
 import { Controller } from '@presentation/protocols'
 
 import { Delete{{pascalCase name}}MongoRepository }  from '@infra/database/mongodb/{{kebabCase name}}'
-// import { Delete{{pascalCase name}}PrismaRepository }  from '@infra/database/prisma/{{kebabCase name}}'
+import { Delete{{pascalCase name}}PrismaRepository }  from '@infra/database/prisma/{{kebabCase name}}'
 
 import {
   DbDelete{{pascalCase name}},
@@ -12,10 +12,10 @@ import {
 import { AbstractFactory } from '../abstract-factory'
 
 export class Delete{{pascalCase name}}Factory extends AbstractFactory<Delete{{pascalCase name}}RepositoryProtocol> {
-  // makePrismaRepository = (): Delete{{pascalCase name}}RepositoryProtocol => {
-  //   const repository = new Delete{{pascalCase name}}PrismaRepository()
-  //   return repository
-  // }
+   makePrismaRepository = (): Delete{{pascalCase name}}RepositoryProtocol => {
+     const repository = new Delete{{pascalCase name}}PrismaRepository()
+     return repository
+   }
 
   makeMongoRepository = (): Delete{{pascalCase name}}RepositoryProtocol => {
     const repository = new Delete{{pascalCase name}}MongoRepository()

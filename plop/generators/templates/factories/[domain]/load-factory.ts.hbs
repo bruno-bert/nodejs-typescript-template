@@ -1,7 +1,7 @@
 import { Controller } from '@presentation/protocols'
 
 import { Load{{pascalCase name}}MongoRepository } from '@infra/database/mongodb/{{kebabCase name}}'
-// import { Load{{pascalCase name}}PrismaRepository }  from '@infra/database/prisma/{{kebabCase name}}'
+import { Load{{pascalCase name}}PrismaRepository }  from '@infra/database/prisma/{{kebabCase name}}'
 
 import {
   DbLoad{{pascalCase name}},
@@ -12,10 +12,10 @@ import {
 import { AbstractFactory } from '../abstract-factory'
 
 export class Load{{pascalCase name}}Factory extends AbstractFactory<Load{{pascalCase name}}RepositoryProtocol> {
-  // makePrismaRepository = (): Load{{pascalCase name}}RepositoryProtocol => {
-  //   const repository = new Load{{pascalCase name}}PrismaRepository()
-  //   return repository
-  // }
+  makePrismaRepository = (): Load{{pascalCase name}}RepositoryProtocol => {
+     const repository = new Load{{pascalCase name}}PrismaRepository()
+     return repository
+   }
 
   makeMongoRepository = (): Load{{pascalCase name}}RepositoryProtocol => {
     const repository = new Load{{pascalCase name}}MongoRepository()

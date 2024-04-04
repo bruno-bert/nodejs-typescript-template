@@ -1,0 +1,19 @@
+import { Load{{pascalCase name}}RepositoryProtocol } from '@usecases'
+import { PrismaHelper, prismaClient as prisma } from '../../utils'
+import { DatabaseLoad{{pascalCase name}}Error } from '@usecases/{{kebabCase name}}/load-{{kebabCase name}}/errors'
+
+export class Load{{pascalCase name}}PrismaRepository
+  implements Load{{pascalCase name}}RepositoryProtocol
+{
+  async loadAll(): Promise<Load{{pascalCase name}}RepositoryProtocol.Result> {
+    try {
+      const where: any = {}
+
+      const items = await prisma.{{camelCase name}}.findMany({ where })
+
+      return PrismaHelper.mapCollection(items)
+    } catch (error) {
+      throw new DatabaseLoad{{pascalCase name}}Error(error as string)
+    }
+  }
+}

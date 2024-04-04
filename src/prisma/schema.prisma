@@ -1,0 +1,25 @@
+//******** AUTO GENERATED FILE, DO NOT EDIT.  *********
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "sqlite"
+  url      = env("SQLITE_FILE")
+}
+
+model Shark {
+    
+    id String @id @default(uuid()) 
+    name String   
+date DateTime   
+welcomeMessage String   
+
+
+    // createdat DateTime @default(now()) 
+    // updatedat DateTime @updatedAt 
+    // createdBy String  
+    // lastUpdatedBy String?  
+}

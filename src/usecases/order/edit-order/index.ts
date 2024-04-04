@@ -1,5 +1,0 @@
-export * from '@main/factories/order/edit-order-factory'
-export * from './edit-order-controller'
-export * from './edit-order-model'
-export * from './edit-order-service'
-export * from './protocols'

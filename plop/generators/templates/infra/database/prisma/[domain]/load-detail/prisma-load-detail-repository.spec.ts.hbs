@@ -1,0 +1,40 @@
+import { describe, expect, test, beforeEach } from 'vitest'
+import { Load{{pascalCase name}}DetailPrismaRepository } from './prisma-load-{{kebabCase name}}-detail-repository'
+import { prismaClient as prisma } from '../../utils'
+import { mockCreate{{pascalCase name}}Params } from '@test-mocks'
+import { DatabaseLoad{{pascalCase name}}DetailNotFoundError } from '@usecases/{{kebabCase name}}/load-{{kebabCase name}}-detail/errors'
+
+const makeSut = () => {
+  return {
+    sut: new Load{{pascalCase name}}DetailPrismaRepository(),
+  }
+}
+
+beforeEach(async () => {
+  await prisma.{{camelCase name}}.deleteMany({})
+})
+
+describe('Test Suite for prisma-load-{{kebabCase name}}-detail-repository.spec', () => {
+  test('Ensure that load {{kebabCase name}} detail will return required id', async () => {
+    const record = await prisma.{{camelCase name}}.create({
+      data: mockCreate{{pascalCase name}}Params() as any,
+    })
+
+    const { sut } = makeSut()
+    const result = await sut.loadById(record.id)
+    expect(result.id).toEqual(record.id)
+  })
+
+  test('Ensure that edit {{kebabCase name}} returns correct error when id is not found', async () => {
+    await prisma.{{camelCase name}}.create({
+      data: mockCreate{{pascalCase name}}Params() as any,
+    })
+
+    const { sut } = makeSut()
+    const otherId = '1'
+    const promise = sut.loadById(otherId)
+    await expect(promise).rejects.toThrowError(
+      DatabaseLoad{{pascalCase name}}DetailNotFoundError,
+    )
+  })
+})

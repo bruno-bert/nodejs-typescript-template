@@ -10,6 +10,7 @@ import { GenericValidator } from '@utils/generic-validator'
 
 export abstract class AbstractFactory<RepositoryProtocol> {
   abstract makeMongoRepository(): RepositoryProtocol
+  abstract makePrismaRepository(): RepositoryProtocol
   abstract makeController(): Controller
 
   makeDatabaseRepository = (): RepositoryProtocol => {
@@ -18,10 +19,10 @@ export abstract class AbstractFactory<RepositoryProtocol> {
         const repository = this.makeMongoRepository()
         return makeMetricsDecorator(repository) as unknown as RepositoryProtocol
       }
-      // case 'PRISMA': {
-      //   const repository = makePrismaRepository()
-      //   return makeMetricsDecorator(repository) as RepositoryProtocol
-      // }
+      case 'PRISMA': {
+        const repository = this.makePrismaRepository()
+        return makeMetricsDecorator(repository) as RepositoryProtocol
+      }
       default: {
         const repository = this.makeMongoRepository()
         return makeMetricsDecorator(repository) as unknown as RepositoryProtocol

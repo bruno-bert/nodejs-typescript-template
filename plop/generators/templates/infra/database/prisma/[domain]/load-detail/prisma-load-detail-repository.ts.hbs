@@ -1,0 +1,31 @@
+import { PrismaHelper, prismaClient as prisma } from '../../utils'
+import {
+  DatabaseInvalidIdError,
+  Load{{pascalCase name}}DetailRepositoryProtocol,
+} from '@usecases'
+import {
+  DatabaseLoad{{pascalCase name}}DetailError,
+  DatabaseLoad{{pascalCase name}}DetailNotFoundError,
+} from '@usecases/{{kebabCase name}}/load-{{kebabCase name}}-detail/errors'
+
+export class Load{{pascalCase name}}DetailPrismaRepository
+  implements Load{{pascalCase name}}DetailRepositoryProtocol
+{
+  async loadById(
+    id: string,
+  ): Promise<Load{{pascalCase name}}DetailRepositoryProtocol.Result> {
+    try {
+      const where: any = { id }
+
+      const item = await prisma.{{camelCase name}}.findUnique({ where })
+      if (!item) {
+        throw new DatabaseLoad{{pascalCase name}}DetailNotFoundError('id: ' + id)
+      }
+      return PrismaHelper.map(item)
+    } catch (error) {
+      if (error instanceof DatabaseLoad{{pascalCase name}}DetailNotFoundError) throw error
+      if (error instanceof DatabaseInvalidIdError) throw error
+      throw new DatabaseLoad{{pascalCase name}}DetailError(error as string)
+    }
+  }
+}

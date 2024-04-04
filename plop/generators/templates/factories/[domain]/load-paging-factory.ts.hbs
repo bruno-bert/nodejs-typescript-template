@@ -1,7 +1,7 @@
 import { Controller } from '@presentation/protocols'
 
 import { Load{{pascalCase name}}PagingMongoRepository } from '@infra/database/mongodb/{{kebabCase name}}'
-// import { Load{{pascalCase name}}PagingPrismaRepository } from '@infra/database/prisma/{{kebabCase name}}'
+import { Load{{pascalCase name}}PagingPrismaRepository } from '@infra/database/prisma/{{kebabCase name}}'
 
 import {
   DbLoad{{pascalCase name}}Paging,
@@ -12,10 +12,10 @@ import {
 import { AbstractFactory } from '../abstract-factory'
 
 export class Load{{pascalCase name}}PagingFactory extends AbstractFactory<Load{{pascalCase name}}PagingRepositoryProtocol> {
-  // makePrismaRepository = (): Load{{pascalCase name}}PagingRepositoryProtocol => {
-  //   const repository = new Load{{pascalCase name}}PagingPrismaRepository()
-  //   return repository
-  // }
+   makePrismaRepository = (): Load{{pascalCase name}}PagingRepositoryProtocol => {
+     const repository = new Load{{pascalCase name}}PagingPrismaRepository()
+     return repository
+   }
 
   makeMongoRepository = (): Load{{pascalCase name}}PagingRepositoryProtocol => {
     const repository = new Load{{pascalCase name}}PagingMongoRepository()

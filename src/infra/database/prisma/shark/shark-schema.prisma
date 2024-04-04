@@ -1,0 +1,13 @@
+model Shark {
+    
+    id String @id @default(uuid()) 
+    name String   
+date DateTime   
+welcomeMessage String   
+
+
+    // createdat DateTime @default(now()) 
+    // updatedat DateTime @updatedAt 
+    // createdBy String  
+    // lastUpdatedBy String?  
+}

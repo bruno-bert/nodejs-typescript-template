@@ -1,0 +1,10 @@
+model {{pascalCase name}} {
+    
+    id String @id @default(uuid()) 
+    {{prismaFields fields}}
+
+    // createdat DateTime @default(now()) 
+    // updatedat DateTime @updatedAt 
+    // createdBy String  
+    // lastUpdatedBy String?  
+}
